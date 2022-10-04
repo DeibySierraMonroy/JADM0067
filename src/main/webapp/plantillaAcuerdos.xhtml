@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/Resource/template/mesaTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px
+             ;border-top-style: solid;border-top-color:#006ba1">
+
+            <p:toolbar id="tb">
+                <f:facet name="left">
+                    <div class="field col-12 md:col-12">
+                        <div class="grid ui-fluid">
+                            <div class="col-6">
+                               
+                                <div class="ui-inputgroup">
+                                    <div class="ui-inputgroup-addon"><i class="pi pi-building"></i></div>
+                                    <p:inputText 
+                                        readonly="true"
+                                        value="#{mesaContratosBean.informacionAsociada.tdc_td}- #{mesaContratosBean.informacionAsociada.emp_nd}- #{mesaContratosBean.informacionAsociada.emp_nom}"
+                                        />
+                                </div>
+                            </div>
+                            <div class="col-6">
+                             
+                                <div class="ui-inputgroup">
+                                    <div class="ui-inputgroup-addon"><i class="pi pi-user"></i></div>
+                                    <p:inputText 
+                                        readonly="true"
+                                        value="#{mesaContratosBean.informacionAsociada.nombre_empleado}"
+                                        />
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                </f:facet>
+                       <f:facet name="right">
+                    <div class="field col-12">
+                        <div class="grid ui-fluid">
+                   
+                          
+                             
+                                <div class="ui-inputgroup">
+                                    <p:commandButton id="movieBtn" value="Consultar" type="button"
+                                                     icon="pi pi-search"/>
+                                  
+                               
+                            </div>
+
+                        </div>
+                    </div>
+                </f:facet>
+            </p:toolbar>
+
+            <div style="height:800px"></div>
+
+            <p:sticky target="tb"/>
+
+        </div>
+
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,260 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Mesa de Contratos </title>
+        <link rel="stylesheet" href="Resource/css/styles.css"></link>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex/themes/saga-blue.css"></link>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.2/primeflex.css"></link>
+        <link rel="stylesheet" href="./Resource/Fonts/Poppins/Poppins-Black.ttf"></link>
+        <script src="Resource/js/loadGenerico.js" type="text/javascript"/>
+        <link rel="stylesheet" href="Resource/css/styles.css"></link>
+    </h:head>
+    <h:body>        
+        <p:growl id="message" showDetail="true"/>
+        <p:tooltip/>
+        <ui:insert name="content"/>
+
+
+        <p:dialog header="Responsables Internos del Cliente" 
+                  widgetVar="responsableInterno" 
+                  minHeight="40" 
+                  width="auto" 
+                  showEffect="fade"
+                  minimizable="true" 
+                  maximizable="true"
+
+                  >
+
+            <p:dataTable var="responsable" 
+                         value="#{mesaContratosBean.responsableInternos}"
+                         draggableColumns="true"
+                         id="tablaResponsables"
+                         reflow="true" 
+                         rows="5" 
+                         paginator="true"
+                         >
+                <p:column headerText="Cargo ">
+                    <h:outputText value="#{responsable.TCA_DESCRIPCION}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{responsable.RIN_NOMBRE}" />
+                </p:column>
+
+                <p:column headerText="E-mail">
+                    <h:outputText value="#{responsable.RIN_MAIL}" />
+                </p:column>
+
+                <p:column headerText="Contacto">
+                    <h:outputText value="#{responsable.RIN_TELEFONO}" />
+                </p:column>
+            </p:dataTable>
+
+        </p:dialog>
+
+
+
+
+
+
+        <p:dialog header="Responsables de la Empresa" 
+                  widgetVar="responsableEmpresa" 
+                  minHeight="40" 
+                  width="auto" 
+                  showEffect="fade"
+                  minimizable="true" 
+                  maximizable="true"
+                  >
+
+            <p:dataTable var="reponsable" 
+                         value="#{mesaContratosBean.responsableEmpresas}"
+                         draggableColumns="true"
+                         id="tblresponsabl"
+                         reflow="true" 
+                         rows="3" 
+                         paginator="true"
+                         >
+                <p:column headerText="Codigo">
+                    <h:outputText value="#{reponsable.TRS_CODIGO}" />
+                </p:column>
+
+                <p:column headerText="Tipo de Responsable">
+                    <h:outputText value="#{reponsable.TRS_TIPO}" />
+                </p:column>
+
+                <p:column headerText="Nombre y Apellidos">
+                    <h:outputText value="#{reponsable.RCL_NOMBRE}" />
+                </p:column>
+
+                <p:column headerText="Cargo">
+                    <h:outputText value="#{reponsable.RCL_CARGO}" />
+                </p:column>
+
+            </p:dataTable>
+
+        </p:dialog>
+        <p:dialog header="Observaciones Generales" 
+                  widgetVar="observacionesGenerales" 
+                  minHeight="40" 
+                  width="auto" 
+                  showEffect="fade"
+                  minimizable="true" 
+                  maximizable="true"
+
+                  >
+
+            <p:dataTable var="observacion" 
+                         value="#{mesaContratosBean.observacionesGeneraleses}"
+                         draggableColumns="true"
+                         id="tblObservacionesGenerales"
+                         reflow="true" 
+                         rows="3" 
+                         paginator="true"
+                         >
+                <p:column headerText="Codigo">
+                    <h:outputText value="#{observacion.OBS_CODIGO}" />
+                </p:column>
+
+                <p:column headerText="Detalle de Observación">
+                    <h:outputText value="#{observacion.OBG_DETALLE}" />
+                </p:column>
+
+                <p:column headerText="Usuario">
+                    <h:outputText value="#{observacion.AUD_USUARIO}" />
+                </p:column>
+
+                <p:column headerText="Fecha">
+                    <h:outputText value="#{observacion.AUD_FECHA}" />
+                </p:column>
+
+            </p:dataTable>
+
+        </p:dialog>
+
+        <p:dialog header="Sucursales Empresa" 
+                  widgetVar="sucursalEmpresa" 
+                  minHeight="40" 
+                  width="auto" 
+                  showEffect="fade"
+                  minimizable="true" 
+                  maximizable="true"
+                  >
+
+            <p:dataTable var="sucursal" 
+                         value="#{mesaContratosBean.sucursal}"
+                         draggableColumns="true"
+                         id="tblsucursalEmpresa"
+                         reflow="true" 
+                         rows="6" 
+                         paginator="true"
+                         >
+                <p:column headerText="id ">
+                    <h:outputText value="#{sucursal.SUE_CODIGO}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{sucursal.SUE_NOMBRE}" />
+                </p:column>
+
+                <p:column headerText="Direccion">
+                    <h:outputText value="#{sucursal.SUE_DIRECCION}" />
+                </p:column>
+
+            </p:dataTable>
+
+        </p:dialog>
+        <p:dialog header="Contacto Sucursal" 
+                  widgetVar="contactoSucursal" 
+                  minHeight="40" 
+                  width="657px" 
+                  showEffect="fade"
+                  minimizable="true" 
+                  maximizable="true"
+                  >
+
+            <p:dataTable var="contacto" 
+                         value="#{mesaContratosBean.contactoSucur}"
+                         draggableColumns="true"
+                         id="tblcontactoSucursal"
+                         reflow="true" 
+                         rows="6" 
+                         paginator="true"
+
+                         >
+                <p:column headerText="id ">
+                    <h:outputText value="#{contacto.TIC_CODIGO}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{contacto.CSU_NOMBRE}" />
+                </p:column>
+
+                <p:column headerText="Direccion">
+                    <h:outputText value="#{contacto.CSU_DESCRIPCION}" />
+                </p:column>
+
+            </p:dataTable>
+
+        </p:dialog>
+        <p:dialog header="Nota Agrupacion" 
+                  widgetVar="notaEmpresa" 
+                  minHeight="40" 
+                  width="950px" 
+                  showEffect="fade"
+                  minimizable="true" 
+                  maximizable="true"
+
+                  >
+            <p:dataTable var="nota" 
+                         value="#{mesaContratosBean.agrupacionEmpresas1}"
+                         draggableColumns="true"
+                         id="tblnotaEmpresa"
+                         reflow="true" 
+                         scrollable="true"
+                         scrollHeight="250"
+
+
+                         >
+                <p:column headerText="Codigo">
+                    <h:outputText value="#{nota.NOA_CODIGO}" />
+                </p:column>
+
+                <p:column headerText="Descripcion">
+                    <h:outputText value="#{nota.NOA_DESCRIPCION}" />
+                </p:column>
+
+                <p:column headerText="Usuario">
+                    <h:outputText value="#{nota.AUD_USUARIO}" />
+                </p:column>
+                <p:column headerText="Fecha">
+                    <h:outputText value="#{nota.AUD_FECHA}" />
+                </p:column>
+
+            </p:dataTable>
+
+        </p:dialog>
+
+
+        <p:dialog 
+            widgetVar="statusDialog" 
+            modal="true" 
+            draggable="false" 
+            resizable="false" 
+            showHeader="false"
+            showEffect="fade"
+            style="border-radius: 6px
+            ;border-top-style: solid;border-top-color:#f2a325"
+            width="auto"
+
+            >                  
+
+            <img src="Resource/gif/final.gif" alt="" width="500px"    />
+
+        </p:dialog>
+    </h:body>
+</html>

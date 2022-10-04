@@ -1,0 +1,289 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Sep 5, 2022, 9:22:33 AM
+    Author     : desierra
+*/
+
+@font-face {
+    font-family: Activos;
+    src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+body * {
+    font-family: Activos;
+    margin: 0;
+    padding: 0;
+
+
+}
+
+
+@media (max-width: 800px) {
+    .flex {
+        flex-direction: column;
+    }
+}
+
+body .ui-steps .ui-steps-item.ui-state-highlight .ui-steps-number {
+    background: #2196f3;
+    color: whitesmoke;
+    border-color: #020202;
+}
+
+.ui-datatable-frozenlayout-left {
+    width: 20%;
+}
+
+.ui-datatable-frozenlayout-right {
+    width: 80%;
+}
+body .ui-selectonemenu {
+    vertical-align: middle;
+    border: 1px solid #ced4da;
+    position: relative;
+    transform: none;
+    padding: 0;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    border-radius: 4px;
+    background: white   ;
+    width: 100%;
+    margin-bottom:  10px;
+}
+
+body .ui-fieldset .ui-fieldset-legend {
+    border: 1px solid #ced4da;
+    background: #2196f3;
+    color: white;
+    padding: 1rem;
+    font-weight: 400;
+    border-radius: 4px;
+    user-select: none;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+body .ui-fieldset .ui-fieldset-legend .empresa{
+    border: 1px solid #ced4da;
+    background: #f2a325;
+    color: white;
+    padding: 1rem;
+    font-weight: 400;
+    border-radius: 4px;
+    user-select: none;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.ui-inputfield {
+    color: #495057;
+    background: white;
+    /* padding: 0.5rem 0.5rem; */
+    border: 1px solid #ced4da;
+    outline: 0 none;
+    width: 100%;
+    font-size: 1rem;
+    font-family: Activos;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+    font-weight: bold;
+}
+
+.labelAcuerdo{
+    font-weight: bold;
+    
+}
+
+.ui-sticky {
+    top: 70px !important;
+}
+
+@media (max-width: 960px) {
+    .ui-sticky {
+        top: 110px !important;
+    }
+}
+body .ui-toolbar {
+    border-top: 3px solid #006ba1;
+    background: white;
+    color: #4a4c4e;
+    padding: 1rem;
+    border-radius: 6px;
+}
+.ui-datatable table {
+    border-collapse: collapse; 
+     width: 100%; 
+    table-layout: fixed; 
+    background-color: #f2a325;
+    
+}
+
+body .ui-widget {
+     font-family: Activos;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.ui-dialog {
+    position: fixed;
+    padding: 0;
+    overflow: hidden;
+    display: none;
+    background-color: #020202;
+}
+body .ui-datatable .ui-datatable-data > tr.ui-state-highlight {
+    background: #FFE06B;
+    color: #495057;
+}
+.ui-fluid .ui-inputtext {
+    width: 100%;
+    text-align: center;
+}
+/* background */
+.bg-gray-50 {
+    background-color: #f9fafb;
+}
+
+/* Display */
+.block {
+    display: block;
+}
+
+.flex {
+    display: flex;
+}
+
+/* Flex */
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.items-center {
+    align-items: center;
+}
+
+/*Font*/
+.font-semibold {
+    font-weight: 600;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+}
+
+
+
+.text-gray-400 {
+    color: rgb(156 163 175);
+}
+
+.underline {
+    text-decoration-line: underline;
+}
+
+/*Height*/
+.h-full {
+    height: 100%;
+}
+
+/* Margin */
+.m-0 {
+    margin: 0;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.m-4 {
+    margin: 1rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.mr-2 {
+    margin-right: 0.5rem;
+}
+
+.m-6 {
+    margin: 24px;
+}
+
+/* Padding */
+.p-2 {
+    padding: .5rem;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+/*width*/
+.w-32 {
+    width: 8rem;
+}
+
+.w-64 {
+    width: 16rem;
+}
+
+.w-72 {
+    width: 18rem;
+}
+
+.w-80 {
+    width: 20rem;
+}
+
+.w-96 {
+    width: 24rem;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.max-w-lg {
+    max-width: 32rem;
+}
+
+/*shadow*/
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/*Cutom utils*/
+.status-success,
+.status-warning,
+.status-error {
+    padding: .25em .5rem;
+}
+
+.status-success {
+    background-color: #D1FAE5;
+    color: #059669;
+}
+
+.status-warning {
+    background-color: #FEF3C7;
+    color: #D97706;
+}
+
+.status-error {
+    background-color: #FEE2E2;
+    color: #DC2626;
+}
