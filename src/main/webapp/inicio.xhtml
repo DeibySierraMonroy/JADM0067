@@ -1,0 +1,93 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Mesa de Contratos </title>
+        <link rel="stylesheet" href="Resource/css/styles.css"></link>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex/themes/saga-blue.css"></link>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.2/primeflex.css"></link>
+        <link rel="stylesheet" href="./Resource/Fonts/Poppins/Poppins-Black.ttf"></link>
+        <script src="Resource/js/loadGenerico.js" type="text/javascript"/>
+        <link rel="stylesheet" href="Resource/css/styles.css"></link>
+    </h:head>
+    <h:body>  
+        <h:form id="formIndex">
+            <div class="grid grid-nogutter surface-section text-800 "  >
+                <div class="col-12 md:col-6 p-6 text-center md:text-left flex align-items-center " style="margin:0px auto;">
+                    <section>
+                        <span class="block text-6xl font-bold mb-1">Bienvenido a la Mesa de contratos</span>
+
+                        <div class="text-6xl text-yellow-500 font-bold mb-3">#{indexBean.informacionDelAnalista()} </div>
+
+                        <p class="mt-0 mb-4 text-700 line-height-3">
+                            <b>Responsables del tratamiento de sus datos personales:</b>
+                            el responsable del tratamiento
+                            de sus datos personales será LA ORGANIZACIÓN, ante quien los interesados y titulares
+                            podrán dirigirse para el efectivo ejercicio de sus derechos de acceso, rectificación,
+                            actualización, supresión y revocación de la autorización de tratamiento. El ejercicio de
+                            estos derechos estará restringido conforme a los límites establecidos por Ley.
+                            <a href="https://www.activos.com.co/cmsa/wp-content/uploads/2020/10/IG20-V3-AVISO-DE-PRIVACIDAD-ACTIVOS-17Oct2019.pdf" target="_blank">
+                                Más información</a>
+                        </p>
+
+                        <p:commandButton value="Administracion"  class="mr-3 ui-button-raised 
+                                         animation-color animation-fill-none" 
+                                         icon="pi pi-chart-bar"
+                                         action="administracion?faces-redirect=true" immediate="true"
+                                         /> 
+                        
+                        
+
+                        <p:commandButton value="Continuar"
+                                         icon="pi pi-reply" 
+                                         class="mr-3 ui-button-raised 
+                                         animation-color animation-fill-forwards" 
+                                         onstart="PrimeFaces.monitorDownload(start);"
+                                         oncomplete="PrimeFaces.monitorDownload(stop);"
+                                         action="#{mesaContratosBean.estadoDelAnalista()}" immediate="true"
+                                         />
+
+
+                    </section>
+                </div>
+                <div class="col-12 md:col-6 overflow-hidden" >
+                    <img src="Resource/gif/Fondo_Inicio_V2.gif" alt=""  styleClass="md:ml-auto block md:h-full" width="96%"
+                         style="clip-path: polygon(10% 0, 100% 0%, 100% 100%, 0% 100%);"  />
+
+                </div>
+            </div>
+
+        </h:form>
+        <p:dialog 
+            widgetVar="infImportancia" 
+            minHeight="40" 
+            width="350" 
+            showEffect="fade" 
+            modal="true"
+            style="text-align: center"
+            >
+            <i class="pi pi-exclamation-triangle" style="font-size: 4rem"></i>
+            <p class="m-0 " > Estimado  <b> #{indexBean.informacionDelAnalista()}  </b> : Recuerde que para visualizar los documentos es importante iniciar sesión primero en 
+                <b>AZDigital </b> de lo contrario no podrá visualizar los documentos. Clic  aquí para iniciar sesión en 
+                <a href="https://activos.analitica.com.co/AZDigital_Pruebas/Login/Login.php?Salir=Ok" target="_blank"> AZDigital</a></p>
+        </p:dialog>
+        
+          <p:dialog 
+            widgetVar="statusDialog" 
+            modal="true" 
+            draggable="false" 
+            resizable="false" 
+            showHeader="false"
+            showEffect="fade"
+            style="border-radius: 6px
+            ;border-top-style: solid;border-top-color:#f2a325"
+            width="auto" >                  
+
+            <img src="Resource/gif/final.gif" alt="" width="500px"    />
+
+        </p:dialog>
+
+    </h:body>
+</html>

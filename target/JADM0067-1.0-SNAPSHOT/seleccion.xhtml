@@ -1,0 +1,282 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Mesa de Contratos </title>
+        <link rel="stylesheet" href="Resource/css/styles.css"></link>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex/themes/saga-blue.css"></link>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.2/primeflex.css"></link>
+        <link rel="stylesheet" href="./Resource/Fonts/Poppins/Poppins-Black.ttf"></link>
+        <script src="Resource/js/loadGenerico.js" type="text/javascript"/>
+        <link rel="stylesheet" href="Resource/css/styles.css"></link>
+    </h:head>
+    <h:body>  
+        <p:growl id="message" showDetail="true"/>
+    
+        <h:form id="form">
+            <p:card style="width:auto" >
+                <div class="grid" style=" padding:0">             
+                    <div class="col-12 md:col-6 lg:col-4">
+
+                        <div class="surface-card shadow-2 p-3 border-round"
+                             style="border-top-color: #006ba1;border-top-style: solid">
+                            <div class="flex justify-content-between mb-3">
+                                <div>
+                                    <span class="block text-500 font-medium mb-3">Total Candidatos</span>
+                                    <div class="text-900 font-medium align-items-center  text-3xl">#{mesaContratosBean.analista.totalCandidatos}</div>
+                                </div>
+                                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                                     style="width:2.5rem;height:2.5rem">
+                                    <i class="pi pi-user text-blue-500 text-xl"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4">
+
+                        <div class="surface-card shadow-2 p-3 border-round"
+                             style="border-top-color: #f57c00;border-top-style: solid">
+                            <div class="flex justify-content-between mb-3">
+                                <div>
+                                    <span class="block text-500 font-medium mb-3">Candidatos Rechazados</span>
+                                    <div class="text-900 font-medium text-3xl">#{mesaContratosBean.analista.candidatosRechazados}</div>
+                                </div>
+                                <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
+                                     style="width:2.5rem;height:2.5rem">
+                                    <i class="pi pi-times text-orange-500 text-xl"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4" id="candidatosAprobados">
+
+                        <div class="surface-card shadow-2 p-3 border-round"
+                             style="border-top-color: #00bcd4;border-top-style: solid">
+                            <div class="flex justify-content-between mb-3">
+                                <div>
+                                    <span class="block text-500 font-medium mb-3">Candidatos Aprobados</span>
+                                    <div class="text-900 font-medium text-3xl">#{mesaContratosBean.analista.candidatosAprobados}</div>
+                                </div>
+                                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                                     style="width:2.5rem;height:2.5rem">
+                                    <i class="pi pi-check text-cyan-500 text-xl"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p:card>
+        </h:form>
+
+        <h:form id="form1">
+
+            <p:card style="width:auto">
+
+                <div class="grid">
+                    <div class="col-12 lg:col-12">
+                        <div class="p-0 h-full">
+                            <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px
+                                 ;border-top-style: solid;border-top-color:#006ba1">
+                                <div class="text-900 font-medium text-xl mb-2">Panel del Candidato</div>
+                                <div class="card">
+                                    <p:panelGrid columns="1"
+                                                 layout="grid"
+                                                 styleClass="showcase-text-align-center"
+                                                 rendered="true"
+                                                 id="panel">
+                                        <p:steps activeIndex="0" class="ui-steps-number">
+                                            <p:menuitem value="Seleccion"/>
+                                            <p:menuitem value="Visualizacion"/>
+                                            <p:menuitem value="Aprobacion"/>
+                                        </p:steps>
+                                    </p:panelGrid>
+                                </div>
+                                <div class="col-12 lg:col-12">
+                                    <div class="card">
+                                        <div class="grid ui-fluid">
+
+                                            <div class="col-12 md:col-3">
+                                                <div class="shadow-2 p-3 h-full flex flex-column surface-card"
+                                                     style="border-radius: 6px
+                                                     ;border-top-style: solid;border-top-color:#006ba1">
+                                                    <p:outputLabel for="" value="Seleccione un candidato"
+                                                                   style="font-family: Activos"/>
+                                                    <br></br>
+                                                    <div class="grid ui-fluid">
+                                                        <div class="field col-12 md:col-4">
+                                                            <div class="ui-inputgroup">
+                                                                <p:outputLabel for="@next" value="Estado  : "
+                                                                               style="font-family: Activos"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="field col-12 md:col-4">
+                                                            <div class="ui-inputgroup">
+                                                                <p:outputLabel for="" value="#{mesaContratosBean.estadoCedulas}" class="text-xl "
+                                                                               style="font-family:Activos;border-bottom-style: solid;border-bottom-color:#ce353a"/>
+                                                            </div>
+                                                        </div>
+                                                        <p:autoUpdate/>
+                                                        <p:selectOneMenu value="#{mesaContratosBean.cedulaPeritaje}" 
+                                                                         converter="entityConverter"    
+                                                                         id="selectCedulaPeritaje"
+                                                                         required="true" 
+                                                                         requiredMessage="Debe seleccionar un documento para continuar"  
+                                                                         filter="true" 
+                                                                         filterMatchMode="contains"
+
+                                                                         >
+                                                            <f:selectItem itemLabel="Seleccione una cedula" itemValue="#{mesaContratosBean.cedulaPeritaje}" />
+                                                            <f:selectItems value="#{mesaContratosBean.cedulasPeritaje}" 
+                                                                           var="cedula"
+                                                                           itemLabel="#{cedula.tdc_td_epl} - #{cedula.epl_nd}" 
+                                                                           itemValue="#{cedula}"/>
+                                                            <p:ajax event="change" 
+                                                                    listener="#{mesaContratosBean.informacionPeritaje()}"
+                                                                    update="label informacionPeritaje form1:selectCedulaPeritaje"
+
+
+
+                                                                    />
+                                                            <p:poll interval="20" listener="#{mesaContratosBean.listarCedulasPeritaje()}" />
+
+                                                            <f:facet name="footer">
+                                                                <p:divider styleClass="mt-0"/>
+                                                                <h:outputText value="#{mesaContratosBean.cedulasPeritaje.size()}" style="font-weight:bold;"/>
+                                                            </f:facet>
+
+
+                                                        </p:selectOneMenu>
+                                                        <div class="field col-12 md:col-12">
+                                                            <div class="ui-inputgroup">
+                                                                <p:outputLabel
+                                                                    id="label"
+                                                                    value="#{mesaContratosBean.observacionCedulaPeritaje}"
+                                                                    class="text-red-500-"
+                                                                    style="font-family:Activos;color:red"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="field col-12 md:col-9">
+
+                                                <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px
+                                                     ;border-top-style: solid;border-top-color:#f2a325">
+                                                    <p:panel id="informacionPeritaje">
+                                                        <p:outputLabel for="@next" value="Informacion de la Empresa"
+                                                                       style="font-family: Activos"/>
+                                                        <div class="grid ui-fluid">
+                                                            <div class="col-12 md:col-4">
+                                                                <h5>Nit :</h5>
+                                                                <div class="ui-inputgroup">
+                                                                    <div class="ui-inputgroup-addon"><i
+                                                                            class="pi pi-id-card"></i></div>
+                                                                    <p:inputText placeholder="Nit" 
+                                                                                 readonly="true"
+                                                                                 value="#{mesaContratosBean.informacionAsociada.emp_nd}"
+                                                                                 />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 md:col-4">
+                                                                <h5>Nombre de la empresa :</h5>
+                                                                <div class="ui-inputgroup">
+                                                                    <div class="ui-inputgroup-addon"><i
+                                                                            class="pi pi-building"></i></div>
+                                                                    <p:inputText placeholder="Nombre de la empresa"
+                                                                                 readonly="true"
+                                                                                 value="#{mesaContratosBean.informacionAsociada.emp_nom}"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 md:col-4">
+                                                                <h5>#Libro consecutivo :</h5>
+                                                                <div class="ui-inputgroup">
+                                                                    <div class="ui-inputgroup-addon"><i
+                                                                            class="pi pi-hashtag"></i></div>
+                                                                    <p:inputText placeholder="Libro consecutivo"
+                                                                                 readonly="true"
+                                                                                 value="#{mesaContratosBean.informacionAsociada.lib_consecutivo}"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
+                                                        <p:outputLabel for="@next" value="Informacion del candidato"
+                                                                       style="font-family: Activos"/>
+                                                        <div class="grid ui-fluid">
+                                                            <div class="col-12 md:col-5">
+                                                                <h5>Nombre del candidato :</h5>
+                                                                <div class="ui-inputgroup">
+                                                                    <div class="ui-inputgroup-addon"><i class="pi pi-user"></i>
+                                                                    </div>
+                                                                    <p:inputText placeholder="Nombre del candidato"
+                                                                                 readonly="true"
+                                                                                 value="#{mesaContratosBean.informacionAsociada.nombre_empleado}"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 md:col-5">
+                                                                <h5>Cargo al que se postula :</h5>
+                                                                <div class="ui-inputgroup">
+                                                                    <div class="ui-inputgroup-addon"><i
+                                                                            class="pi pi-briefcase"></i></div>
+                                                                    <p:inputText placeholder="Cargo"
+                                                                                 readonly="true"
+                                                                                 value="#{mesaContratosBean.informacionAsociada.cargo_empleado}"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </p:panel>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-offset-5">
+                                            <p:commandButton value="Aceptar"
+                                                             action="#{mesaContratosBean.seleccionCandidato('Seleccionar')}"
+                                                             styleClass="mr-2"
+                                                             rendered="#{mesaContratosBean.cedulaPeritaje.epl_nd != null}"
+                                                             icon="pi pi-check"
+                                                             update="message"
+                                                             onstart="PrimeFaces.monitorDownload(start);"                     
+                                                             >
+                                                <p:confirm header="Confirmación"
+                                                           message="Señor usuario una vez seleccionado el candidat@
+                                                           no podrá realizar otro proceso de validacion hasta no culminar
+                                                           el proceso."
+                                                           icon="pi pi-exclamation-triangle"/>
+                                            </p:commandButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"
+                                     />
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes"
+                                     />
+                </p:confirmDialog>
+            </p:card>
+            <p:growl id="message" showDetail="true"/>
+        </h:form>
+
+        <p:dialog 
+            widgetVar="statusDialog" 
+            modal="true" 
+            draggable="false" 
+            resizable="false" 
+            showHeader="false"
+            showEffect="fade"
+            style="border-radius: 6px
+            ;border-top-style: solid;border-top-color:#f2a325"
+            width="auto" >                  
+            <img src="Resource/gif/final.gif" alt="" width="500px" />
+        </p:dialog>
+
+
+    </h:body>
+</html>

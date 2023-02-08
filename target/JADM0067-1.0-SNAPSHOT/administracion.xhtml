@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Administracion - Mesa de Contratos </title>
+        <link rel="stylesheet" href="Resource/css/styles.css"></link>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex/themes/saga-blue.css"></link>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.2/primeflex.css"></link>
+        <link rel="stylesheet" href="./Resource/Fonts/Poppins/Poppins-Black.ttf"></link>
+        <script src="Resource/js/loadGenerico.js" type="text/javascript"/>
+        <link rel="stylesheet" href="Resource/css/styles.css"></link>
+    </h:head>
+    <h:body> 
+        <h:form id="form">
+            <p:card style="width:auto" >
+                <div class="grid" style=" padding:0">             
+                    <div class="col-12 md:col-6 lg:col-4">
+                        <div class="surface-card shadow-2 p-3 border-round"
+                             style="border-top-color: #006ba1;border-top-style: solid">
+                            <div class="flex justify-content-between mb-3">
+                                <div>
+                                    <span class="block text-500 font-medium mb-3">Total Candidatos</span>
+                                    <div class="text-900 font-medium align-items-center  text-3xl">1</div>
+                                </div>
+                                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                                     style="width:2.5rem;height:2.5rem">
+                                    <i class="pi pi-user text-blue-500 text-xl"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4">
+                        <div class="surface-card shadow-2 p-3 border-round"
+                             style="border-top-color: #f57c00;border-top-style: solid">
+                            <div class="flex justify-content-between mb-3">
+                                <div>
+                                    <span class="block text-500 font-medium mb-3">Candidatos Rechazadods</span>
+                                    <div class="text-900 font-medium text-3xl">3</div>
+                                </div>
+                                <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
+                                     style="width:2.5rem;height:2.5rem">
+                                    <i class="pi pi-times text-orange-500 text-xl"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4" id="candidatosAprobados">
+                        <div class="surface-card shadow-2 p-3 border-round"
+                             style="border-top-color: #00bcd4;border-top-style: solid">
+                            <div class="flex justify-content-between mb-3">
+                                <div>
+                                    <span class="block text-500 font-medium mb-3">Candidatos Aprobados</span>
+                                    <div class="text-900 font-medium text-3xl">2</div>
+                                </div>
+                                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                                     style="width:2.5rem;height:2.5rem">
+                                    <i class="pi pi-check text-cyan-500 text-xl"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p:card>
+        </h:form>
+        <h:form id="FormularioAdministracion">
+            <p:card style="width:auto">
+                <div class="grid">
+                    <div class="col-12 lg:col-12">
+                        <div class="p-0 h-full">
+                            <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px
+                                 ;border-top-style: solid;border-top-color:#ce353a">
+                                <div class="text-900 font-medium text-xl mb-2">Panel de Seguimiento Mesa de Contratos</div>                         
+                                <div class="col-12 lg:col-12">
+                                    <div class="card">
+                                        <div class="grid ui-fluid">
+                                            <div class="col-12 md:col-8">
+                                                <div class="shadow-2 p-3 h-full flex flex-column surface-card"
+                                                     style="border-radius: 6px
+                                                     ;border-top-style: solid;border-top-color:#333">
+                                                    <i class="pi pi-user" style="font-size: 1rem">
+                                                        <p:outputLabel for="" value=" Candidatos en espera ...."
+                                                                       style="font-family: Activos"/>
+                                                    </i>
+                                                    <br></br>
+                                                    <p:poll interval="2" listener="#{administracionMesaContratos.listarCedulasPendientesEnEstadoEMC()}" update="tablaResponsables"/>
+
+                                                    <p:dataTable var="seguimiento" 
+                                                                 value="${administracionMesaContratos.informacionSeguimientoList}"
+                                                                 draggableColumns="true"
+                                                                 id="tablaResponsables"
+                                                                 reflow="true" 
+                                                                  scrollable="true"
+                                                                  scrollHeight="350"
+                                                                 >
+                                                        <p:column headerText="Cedula ">
+                                                            <h:outputText value="${seguimiento.tdc_td_epl} - ${seguimiento.epl_nd}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Empresa">
+                                                            <h:outputText value="${seguimiento.empresa}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Analista que Remite">
+                                                            <h:outputText value="${seguimiento.inc_usuario_nue}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Tiempo">
+                                                            <p:chip label="${seguimiento.tiempo_transcurrido}"
+                                                                    icon="pi pi-clock"
+                                                                    styleClass="mr-2" 
+                                                                    id="tiempo"
+                                                                    style="background-color:${administracionMesaContratos.validarEltiempoTrancurrido(seguimiento.tiempo_transcurrido)};
+                                                                    color: #ffffff"
+                                                                     />
+                                                             <p:tooltip for="tiempo"
+                                                                   
+                                                                        position="bottom" 
+                                                                        showEffect="clip" 
+                                                                        hideEffect="fold"
+                                                                        style="background-color:#f57c00 "
+                                                                        
+                                                                      
+                                                                      />
+                                                        </p:column>
+                                                    </p:dataTable>
+
+                                                </div>
+                                          
+                                                    
+
+                                            </div>
+                                            <div class="field col-12 md:col-4">
+                                                <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px
+                                                     ;border-top-style: solid;border-top-color:#f2a325">
+                                                    <i class="pi pi-users" style="font-size: 1.5rem">
+                                                        <p:outputLabel for="" value=" Analistas Mesa de Contratos"
+
+                                                                       style="font-family: Activos"/></i>
+                                                    <br></br>
+                                                    
+                                                     <p:dataTable var="responsable" 
+                                                                 value="prueba"
+                                                                 draggableColumns="true"
+                                                                 id="tabla"
+                                                                 reflow="true" 
+                                                                 rows="5" 
+                                                                
+                                                                 >
+                                                        <p:column headerText="Nombre Analista">
+                                                            <h:outputText value="ANALISTA PRUEBA" />
+                                                        </p:column>
+
+                                                 
+
+                                                     
+                                                        <p:column headerText="Estado">
+                                                       
+                                                   
+                                                            <p:chip label="disponible" icon="pi pi-check" styleClass="mr-2" 
+                                                                    id="tiempo" style="background-color: #059669; 
+                                                                    color: #ffffff"
+                                                                     />
+                                                             <p:tooltip for="tiempo"
+                                                                        value="Analista disponible" 
+                                                                        position="bottom" 
+                                                                        showEffect="clip" 
+                                                                        hideEffect="fold"/>
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p:card>
+        </h:form>
+    </h:body>
+</html>
