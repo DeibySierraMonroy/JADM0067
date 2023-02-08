@@ -11,13 +11,16 @@ public class ServletInicio extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String idSession = request.getParameter("USS_ID_SESSION");
-     
-        if (idSession == null) {
+        String sessionUsuario;
+       // sessionUsuario = request.getParameter("USS_ID_SESSION");
+       sessionUsuario = "lVEKkOjAntPUbOcejimzfzWARXLWpVlYwfywNyShcuGHoekSpRFvucHCtQhZkVZkYNQoNuLLcsGTdHSGpQSjxsapvfVxTrRBIWvBZveSKLPYjaIjhzJiNAaTtmmgmcNlOCVDCwYzciHgSjYceffhrrVBIiiLXrDZOkblWgiJhRPgjywY";
+        
+        if (sessionUsuario == null) {
             response.sendRedirect("/Resource/error/errorSesion.xhtml");
         }
-        session.setAttribute("USS_ID_SESSION", idSession);
-        response.sendRedirect("mesaContratos.xhtml");
+
+        session.setAttribute("USS_ID_SESSION", sessionUsuario);
+        response.sendRedirect("inicioAplicativo.xhtml");
 
     }
 

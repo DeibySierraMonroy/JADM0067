@@ -17,9 +17,31 @@ public class InformacionPeritaje {
     private String nombre_empleado;
     private String cargo_empleado;
     private String tdc_td_epl;
+    private String correo_empleado;
+    private Long numero_contrato;
+    
 
     public InformacionPeritaje() {
     }
+
+    public Long getNumero_contrato() {
+        return numero_contrato;
+    }
+
+    public void setNumero_contrato(Long numero_contrato) {
+        this.numero_contrato = numero_contrato;
+    }
+    
+    
+
+    public String getCorreo_empleado() {
+        return correo_empleado;
+    }
+
+    public void setCorreo_empleado(String correo_empleado) {
+        this.correo_empleado = correo_empleado;
+    }
+    
     
     public String getTdc_td() {
         return tdc_td;

@@ -8,12 +8,14 @@ import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.Empresa;
 import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.EmpresaPrincipal;
 import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.NotaPorAgrupacionEmpresa;
 import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.ObservacionesGenerales;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.ResponsableContactoEmpresa;
 import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.ResponsableEmpresa;
 import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.ResponsableInterno;
 import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.SucursalEmpresa;
+import com.co.activos.jadm0067.Entities.Causales;
 import com.co.activos.jadm0067.Entities.CedulaPeritaje;
 import com.co.activos.jadm0067.Entities.DatabaseResultDto;
+import com.co.activos.jadm0067.Entities.DatosTaxonomia;
+import com.co.activos.jadm0067.Entities.EstadisticasAnalista;
 import com.co.activos.jadm0067.Entities.InformacionPeritaje;
 import com.co.activos.jadm0067.Enum.DatabaseResultStatus;
 import com.co.activos.jadm0067.Utilities.OracleConnection;
@@ -103,6 +105,9 @@ public class MesaContratoRepoImpl implements MesaContratoRepo {
                     informacionPeritaje.setLib_consecutivo(resultSet.getString("Lib_CONSECUTIVO"));
                     informacionPeritaje.setNombre_empleado(resultSet.getString("nombre_empleado"));
                     informacionPeritaje.setCargo_empleado(resultSet.getString("cargo_empleado"));
+                    informacionPeritaje.setCorreo_empleado(resultSet.getString("correo_empleado"));
+                    informacionPeritaje.setNumero_contrato(resultSet.getLong("cto_numero"));
+                    
 
                 }
                 callbableStatement.close();
@@ -131,8 +136,10 @@ public class MesaContratoRepoImpl implements MesaContratoRepo {
                 callableStatement.setInt("nmlibconsecutivo", nmlibconsecutivo);
 
                 //Parametros de Salida
-                callableStatement.registerOutParameter("vcestadoproceso", OracleType.VARCHAR2);
-                callableStatement.registerOutParameter("vcmensajeproceso", OracleType.VARCHAR2);
+                callableStatement.registerOutParameter("vcestadoproceso", OracleTypes.VARCHAR);
+                callableStatement.registerOutParameter("vcmensajeproceso", OracleTypes.VARCHAR);
+                
+                
 
                 callableStatement.execute();
 
@@ -160,8 +167,8 @@ public class MesaContratoRepoImpl implements MesaContratoRepo {
                 callableStatement.setString("vcresponsable", vcresponsable);
 
                 //Parametros de salida
-                callableStatement.registerOutParameter("vcestadoproceso", OracleType.VARCHAR2);
-                callableStatement.registerOutParameter("nmlibconsecutivo", OracleType.NUMBER);
+                callableStatement.registerOutParameter("vcestadoproceso", OracleTypes.VARCHAR);
+                callableStatement.registerOutParameter("nmlibconsecutivo", OracleTypes.NUMBER);
 
                 callableStatement.execute();
 
@@ -404,17 +411,16 @@ public class MesaContratoRepoImpl implements MesaContratoRepo {
     }
 
     @Override
-    public DatabaseResultDto<EmpresaPrincipal> consultarEmpresaPrincipal(String VCTDC_TD, String VCEMP_ND) {
+    public DatabaseResultDto<EmpresaPrincipal> consultarEmpresaPrincipal(Integer NMEMP_ACU_CODIGO) {
         String estadoProceso = "";
         String mensajeProceso = "";
         List<EmpresaPrincipal> empresaPrincipal;
         try (Connection connection = OracleConnection.getConnection()) {
-            String consulta = "call ACR.QB_ACUERDO_EMPRESA.PL_CONSULTAR_EMPRESA_PRINCIPAL(?,?,?,?,?)";
+            String consulta = "call ACR.QB_ACUERDO_EMPRESA.PL_CONSULTAR_EMPRESA_PRINCIPAL(?,?,?,?)";
             try (CallableStatement callableStatement = connection.prepareCall(consulta)) {
 
                 //Parametros de Entrada
-                callableStatement.setString("VCTDC_TD", VCTDC_TD);
-                callableStatement.setString("VCEMP_ND", VCEMP_ND);
+                callableStatement.setInt("NMEMP_ACU_CODIGO", NMEMP_ACU_CODIGO);
 
                 // Parametros de Salida
                 callableStatement.registerOutParameter("CSCONSULTA", OracleTypes.CURSOR);
@@ -430,7 +436,6 @@ public class MesaContratoRepoImpl implements MesaContratoRepo {
                     empresaPrincipal = new ArrayList<>();
                     while (resultSet.next()) {
                         EmpresaPrincipal empresaPrin = new EmpresaPrincipal();
-                        empresaPrin.setEMP_ND_PRINCIPAL(resultSet.getString("EMP_ND"));
                         empresaPrin.setEEMPRESA_PRINCIPAL(resultSet.getString("EMPRESA"));
                         empresaPrincipal.add(empresaPrin);
                     }
@@ -650,104 +655,336 @@ public class MesaContratoRepoImpl implements MesaContratoRepo {
         String estadoProceso = "";
         String mensajeProceso = "";
         List<AgrupacionAtributo> agrupacionAtributos;
-        try (Connection connection = OracleConnection.getConnection()){
-             String consulta = "call ACR.QB_ACUERDO_EMPRESA.PL_CONSULTAR_VALOR_ATRIBUTO(?,?,?,?)";
-            try(CallableStatement callableStatement = connection.prepareCall(consulta)){
-                
+        try (Connection connection = OracleConnection.getConnection()) {
+            String consulta = "call ACR.QB_ACUERDO_EMPRESA.PL_CONSULTAR_VALOR_ATRIBUTO(?,?,?,?)";
+            try (CallableStatement callableStatement = connection.prepareCall(consulta)) {
+
                 //Parametros de entrada
                 callableStatement.setInt("NMACC_CODIGO", NMACC_CODIGO);
-                
+
                 //Parametros de salida
                 callableStatement.registerOutParameter("CSCONSULTA", OracleTypes.CURSOR);
                 callableStatement.registerOutParameter("VCESTADOPROCESO", OracleTypes.VARCHAR);
                 callableStatement.registerOutParameter("VCMENSAJEPROCESO", OracleTypes.VARCHAR);
-                
+
                 callableStatement.execute();
                 estadoProceso = callableStatement.getString("VCESTADOPROCESO");
                 mensajeProceso = callableStatement.getString("VCMENSAJEPROCESO");
-                
+
                 if (estadoProceso.equals("S")) {
                     ResultSet resultSet = (ResultSet) callableStatement.getObject("CSCONSULTA");
                     agrupacionAtributos = new ArrayList<>();
-                    
-                    while(resultSet.next()){
-                        
-                       AgrupacionAtributo agrupacionAtributo = new AgrupacionAtributo();
-                       agrupacionAtributo.setATR_NOMBRE(resultSet.getString("ATR_NOMBRE"));
-                       agrupacionAtributo.setATR_NOMBRE_DETALLE(resultSet.getString("ATR_NOMBRE_DETALLE"));
-                       agrupacionAtributo.setDAC_CODIGO(resultSet.getInt("DAC_CODIGO"));
-                       agrupacionAtributo.setDAC_DETALLE_DESCRIPCION(resultSet.getString("DAC_DETALLE_DESCRIPCION"));
-                       agrupacionAtributo.setDAC_OBSERVACION(resultSet.getString("DAC_OBSERVACION"));
-                       agrupacionAtributo.setDAC_VALOR_ATR_DETALLE(resultSet.getString("DAC_VALOR_ATR_DETALLE"));
-                       
-                       agrupacionAtributos.add(agrupacionAtributo);
-                    
+
+                    while (resultSet.next()) {
+
+                        AgrupacionAtributo agrupacionAtributo = new AgrupacionAtributo();
+                        agrupacionAtributo.setATR_NOMBRE(resultSet.getString("ATR_NOMBRE"));
+                        agrupacionAtributo.setATR_NOMBRE_DETALLE(resultSet.getString("ATR_NOMBRE_DETALLE"));
+                        agrupacionAtributo.setDAC_CODIGO(resultSet.getInt("DAC_CODIGO"));
+                        agrupacionAtributo.setDAC_DETALLE_DESCRIPCION(resultSet.getString("DAC_DETALLE_DESCRIPCION"));
+                        agrupacionAtributo.setDAC_OBSERVACION(resultSet.getString("DAC_OBSERVACION"));
+                        agrupacionAtributo.setDAC_VALOR_ATR_DETALLE(resultSet.getString("DAC_VALOR_ATR_DETALLE"));
+
+                        agrupacionAtributos.add(agrupacionAtributo);
+
                     }
-                    
-                }else{
-                agrupacionAtributos = new ArrayList<>();
+
+                } else {
+                    agrupacionAtributos = new ArrayList<>();
                 }
-                 callableStatement.close();
+                callableStatement.close();
                 return new DatabaseResultDto<>(DatabaseResultStatus.SUCCESS, "Consulta Exitosa", agrupacionAtributos);
-            
+
             }
         } catch (Exception e) {
             return new DatabaseResultDto<>(DatabaseResultStatus.WARNING, estadoProceso + mensajeProceso + " " + e.getMessage());
         }
-    
-       
+
     }
 
     @Override
     public DatabaseResultDto<NotaPorAgrupacionEmpresa> consultarNotaPorAgrupacion(Integer NMAGA_CODIGO) {
         String estadoProceso = "";
         String mensajeProceso = "";
-        List<NotaPorAgrupacionEmpresa> agrupacionEmpresas ;
-        
-        try (Connection connection = OracleConnection.getConnection()){
+        List<NotaPorAgrupacionEmpresa> agrupacionEmpresas;
+
+        try (Connection connection = OracleConnection.getConnection()) {
             String consulta = "call ACR.QB_ACUERDO_EMPRESA.PL_CONSULTAR_NOTA_AGRUPACION(?,?,?,?)";
-            try(CallableStatement callableStatement = connection.prepareCall(consulta) ){
-                
+            try (CallableStatement callableStatement = connection.prepareCall(consulta)) {
+
                 //Parametros de entrada 
                 callableStatement.setInt("NMAGA_CODIGO", NMAGA_CODIGO);
-                
+
                 //Parametros de Salida
                 callableStatement.registerOutParameter("CSCONSULTA", OracleTypes.CURSOR);
                 callableStatement.registerOutParameter("VCESTADOPROCESO", OracleTypes.VARCHAR);
                 callableStatement.registerOutParameter("VCMENSAJEPROCESO", OracleTypes.VARCHAR);
-                
+
                 callableStatement.execute();
-                
+
                 estadoProceso = callableStatement.getString("VCESTADOPROCESO");
                 mensajeProceso = callableStatement.getString("VCMENSAJEPROCESO");
-                
-                if(estadoProceso.equals("S")){
+
+                if (estadoProceso.equals("S")) {
                     ResultSet resultSet = (ResultSet) callableStatement.getObject("CSCONSULTA");
                     agrupacionEmpresas = new ArrayList<>();
-                    
-                    while(resultSet.next()){
-                    NotaPorAgrupacionEmpresa agrupacionEmpresa = new NotaPorAgrupacionEmpresa();
-                    agrupacionEmpresa.setAUD_FECHA(resultSet.getString("AUD_FECHA"));
-                    agrupacionEmpresa.setAUD_USUARIO(resultSet.getString("AUD_USUARIO"));
-                    agrupacionEmpresa.setNOA_CODIGO(resultSet.getInt("NOA_CODIGO"));
-                    agrupacionEmpresa.setNOA_DESCRIPCION(resultSet.getString("NOA_DESCRIPCION"));
-                    agrupacionEmpresa.setNOA_ORDEN(resultSet.getInt("NOA_ORDEN"));
-                    agrupacionEmpresas.add(agrupacionEmpresa);
+
+                    while (resultSet.next()) {
+                        NotaPorAgrupacionEmpresa agrupacionEmpresa = new NotaPorAgrupacionEmpresa();
+                        agrupacionEmpresa.setAUD_FECHA(resultSet.getString("AUD_FECHA"));
+                        agrupacionEmpresa.setAUD_USUARIO(resultSet.getString("AUD_USUARIO"));
+                        agrupacionEmpresa.setNOA_CODIGO(resultSet.getInt("NOA_CODIGO"));
+                        agrupacionEmpresa.setNOA_DESCRIPCION(resultSet.getString("NOA_DESCRIPCION"));
+                        agrupacionEmpresa.setNOA_ORDEN(resultSet.getInt("NOA_ORDEN"));
+                        agrupacionEmpresas.add(agrupacionEmpresa);
                     }
-                    
-                }else{
-                  agrupacionEmpresas = new ArrayList<>();
+
+                } else {
+                    agrupacionEmpresas = new ArrayList<>();
                 }
-                
-                 callableStatement.close();
-                return new DatabaseResultDto<>(DatabaseResultStatus.SUCCESS, "Consulta Exitosa", agrupacionEmpresas);       
-                
+
+                callableStatement.close();
+                return new DatabaseResultDto<>(DatabaseResultStatus.SUCCESS, "Consulta Exitosa", agrupacionEmpresas);
+
             }
         } catch (Exception e) {
-                return new DatabaseResultDto<>(DatabaseResultStatus.WARNING, estadoProceso + mensajeProceso + " " + e.getMessage());
+            return new DatabaseResultDto<>(DatabaseResultStatus.WARNING, estadoProceso + mensajeProceso + " " + e.getMessage());
         }
-        
-        
+
+    }
+
+    @Override
+    public DatabaseResultDto<Causales> consultarCausales() {
+        String estadoProceso = "";
+        String mensajeProceso = "";
+        List<Causales> causaleses;
+
+        try (Connection connection = OracleConnection.getConnection()) {
+
+            String consulta = "call ADM.qb_jadm0067_mesa_contratos.pl_consultar_causales(?,?,?)";
+
+            try (CallableStatement callableStatement = connection.prepareCall(consulta)) {
+
+                //Parametros de salida
+                callableStatement.registerOutParameter("csconsulta", OracleTypes.CURSOR);
+                callableStatement.registerOutParameter("vcestadoproceso", OracleTypes.VARCHAR);
+                callableStatement.registerOutParameter("vcmensajeproceso", OracleTypes.VARCHAR);
+
+                callableStatement.execute();
+
+                estadoProceso = callableStatement.getString("vcestadoproceso");
+                mensajeProceso = callableStatement.getString("vcmensajeproceso");
+
+                if (estadoProceso.equals("S")) {
+                    ResultSet resultSet = (ResultSet) callableStatement.getObject("csconsulta");
+                    causaleses = new ArrayList<>();
+                    while (resultSet.next()) {
+                        Causales c = new Causales();
+                        c.setCodigo_causal(resultSet.getInt("CODIGO_CAUSAL"));
+                        c.setDescripcion_causal(resultSet.getString("DESCRIPCION_CAUSAL"));
+                        c.setEcl_secuencia(resultSet.getInt("ECL_SECUENCIA"));
+                        causaleses.add(c);
+                    }
+                } else {
+                    causaleses = new ArrayList<>();
+                }
+                callableStatement.close();
+                return new DatabaseResultDto<>(DatabaseResultStatus.SUCCESS, "Consulta Exitosa", causaleses);
+
+            }
+
+        } catch (Exception e) {
+            return new DatabaseResultDto<>(DatabaseResultStatus.WARNING, estadoProceso + mensajeProceso + " " + e.getMessage());
+        }
+
+    }
+
+    @Override
+    public DatabaseResultDto<?> finalizarProceso(Long NMLIBCONSECUTIVO, String VCSTDOESTADO, String VCOBSERVACION, String VCUSUARIO, Integer NMCAUSAL) {
+        String estadoProceso = "";
+        String mensajeProceso = "";
+        try (Connection connection = OracleConnection.getConnection()) {
+
+                String consulta = "call ADM.qb_jadm0067_mesa_contratos.pl_finalizar_proceso(?,?,?,?,?,?,?)";
+
+            try (CallableStatement callbleStatement = connection.prepareCall(consulta)) {
+
+                //Parametros de entrada 
+                callbleStatement.setLong("NMLIBCONSECUTIVO", NMLIBCONSECUTIVO);
+                callbleStatement.setString("VCSTDOESTADO", VCSTDOESTADO);
+                callbleStatement.setString("VCOBSERVACION", VCOBSERVACION);
+                callbleStatement.setString("VCUSUARIO", VCUSUARIO);
+                callbleStatement.setInt("NMCAUSAL", NMCAUSAL);
+
+                //Parametros de Salida
+                callbleStatement.registerOutParameter("VCESTADOPROCESO", OracleTypes.VARCHAR);
+                callbleStatement.registerOutParameter("VCMENSAJEPROCESO", OracleTypes.VARCHAR);
+
+                callbleStatement.execute();
+
+                estadoProceso = callbleStatement.getString("VCESTADOPROCESO");
+                mensajeProceso = callbleStatement.getString("VCMENSAJEPROCESO");
+
+                callbleStatement.close();
+            }
+            return new DatabaseResultDto<>(DatabaseResultStatus.SUCCESS, estadoProceso);
+
+        } catch (Exception e) {
+            return new DatabaseResultDto<>(DatabaseResultStatus.WARNING, estadoProceso + mensajeProceso + " " + e.getMessage());
+        }
+
+    }
+
+    @Override
+    public DatabaseResultDto<?> consultarInformacionAnalista(String TDC_TD_EPL, Long EPL_ND, String Columna) {
+        String nombre;
+        try (Connection connection = OracleConnection.getConnection()) {
+            String consulta = "{? = call RHU.FB_EMPLEADO_COLUMNA(?,?,?)}";
+            try (CallableStatement callableStatement = connection.prepareCall(consulta)) {
+
+                //Parametros de Salida
+                callableStatement.registerOutParameter(1, OracleTypes.VARCHAR);
+
+                //Parametros de Entrada
+                callableStatement.setString(2, TDC_TD_EPL);
+                callableStatement.setLong(3, EPL_ND);
+                callableStatement.setString(4, Columna);
+                callableStatement.executeQuery();
+
+                nombre = callableStatement.getString(1);
+                callableStatement.close();
+                return new DatabaseResultDto<>(DatabaseResultStatus.SUCCESS, nombre);
+            }
+        } catch (Exception e) {
+            return new DatabaseResultDto<>(DatabaseResultStatus.WARNING, e.getMessage());
+        }
+
+    }
+
+    @Override
+    public DatabaseResultDto<EstadisticasAnalista> consultarEstadisticaAnalista(String vcresponsable) {
+
+        EstadisticasAnalista analista;
+        try (Connection connection = OracleConnection.getConnection()) {
+            String consulta = "call ADM.qb_jadm0067_mesa_contratos.pl_estadistica_analista(?,?,?,?,?,?)";
+            try (CallableStatement call = connection.prepareCall(consulta)) {
+
+                //Parametros de entrada
+                call.setString("vcresponsable", vcresponsable);
+
+                //Parametros de salida
+                call.registerOutParameter("nmaprobados", OracleTypes.NUMBER);
+                call.registerOutParameter("nmrechazados", OracleTypes.NUMBER);
+                call.registerOutParameter("nmtotal", OracleTypes.NUMBER);
+                call.registerOutParameter("vcestadoproceso", OracleTypes.VARCHAR);
+                call.registerOutParameter("vcmensajeproceso", OracleTypes.VARCHAR);
+
+                call.execute();
+
+                analista = new EstadisticasAnalista();
+                analista.setCandidatosAprobados(call.getInt("nmaprobados"));
+                analista.setCandidatosRechazados(call.getInt("nmrechazados"));
+                analista.setTotalCandidatos(call.getInt("nmtotal"));
+
+                call.close();
+
+            }
+            return new DatabaseResultDto<>(DatabaseResultStatus.SUCCESS, "Exitoso", analista);
+        } catch (Exception e) {
+            return new DatabaseResultDto<>(DatabaseResultStatus.WARNING, e.getMessage());
+        }
+    }
+
+    @Override
+    public DatabaseResultDto<String>consultarObservacionCedulaPeritaje(Long NMLIBCONSECUTIVO, String VCSTDOESTADO) {
+        String resultado = "";
+        try (Connection connection = OracleConnection.getConnection()) {
+            String consulta = "call  ADM.qb_jadm0067_mesa_contratos.pl_consultar_observacion(?,?,?,?,?)";
+            try (CallableStatement callableStatement = connection.prepareCall(consulta)) {
+
+                //Parametros de Entrada
+                callableStatement.setLong("NMLIBCONSECUTIVO", NMLIBCONSECUTIVO);
+                callableStatement.setString("VCSTDOESTADO", VCSTDOESTADO);
+
+                //Parammetros de Salida
+                callableStatement.registerOutParameter("VCRESULTADO", OracleTypes.VARCHAR);
+                callableStatement.registerOutParameter("vcestadoproceso", OracleTypes.VARCHAR);
+                callableStatement.registerOutParameter("vcmensajeproceso", OracleTypes.VARCHAR);
+
+                callableStatement.execute();
+
+                resultado = callableStatement.getString("VCRESULTADO");
+                
+                callableStatement.close();
+
+            }
+            return new DatabaseResultDto<>(DatabaseResultStatus.SUCCESS, resultado);
+        } catch (Exception e) {
+            return new DatabaseResultDto<>(DatabaseResultStatus.WARNING, e.getMessage());
+        }
+    }
+
+    @Override
+    public DatabaseResultDto<DatosTaxonomia> obtenerCarpetaDeContratacion(Long NMLIBCONSECUTIVO, String flujoPrincipal , String tpProceso) {
+        DatosTaxonomia datosTaxonomia = new DatosTaxonomia();
+        try (Connection connection = OracleConnection.getConnection() ){
+            String consulta = "call ADM.QB_DATOS_TAXONOMIA.PL_OBTENER_LIBRO_PROCESO(?,?,?,?,?,?,?)";
+            try(CallableStatement call = connection.prepareCall(consulta)){
+            
+                //Parametros de Entrada.
+                call.setLong("nmLibConsecutivo", NMLIBCONSECUTIVO);
+                call.setString("vcTipoFlujoPrincipal", flujoPrincipal);
+                call.setString("vcProceso", tpProceso);
+                
+                //Parametros de Salida
+                call.registerOutParameter("nmDeaCodigo", OracleTypes.VARCHAR);
+                call.registerOutParameter("vcAzCodigoCli", OracleTypes.VARCHAR);
+                call.registerOutParameter("vcEstadoProceso", OracleTypes.VARCHAR);
+                call.registerOutParameter("vcMensajeProceso", OracleTypes.VARCHAR);
+                
+                call.execute();
+                
+                if(call.getString("vcEstadoProceso").equals("OK")){
+                  datosTaxonomia.setAzCodigoCli(call.getString("vcAzCodigoCli"));
+                  datosTaxonomia.setDeaCodigo(call.getString("nmDeaCodigo"));
+                }
+                
+                call.close();
+
+            }
+             return new DatabaseResultDto<>(DatabaseResultStatus.SUCCESS, "Consulta Exitosa", datosTaxonomia);
+             
+        } catch (Exception e) {
+             return new DatabaseResultDto<>(DatabaseResultStatus.WARNING, e.getMessage());
+            
+        }
+    }
+
+    @Override
+    public DatabaseResultDto<?> crearAuditoria(String log, DatabaseResultStatus tipo, String aplicativo, String transaccion, String estadoTransaccion) {
+          String resultado = "";
+        try ( Connection connection = OracleConnection.getConnection()) {
+            String consulta = "call adm.qb_JADM0067_mesa_contratos.pl_insertar_auditoria(?,?,?,?,?,?,?)";
+            try ( CallableStatement call = connection.prepareCall(consulta)) {
+
+                //Parametros  de entrada
+                call.setString("VCLOG", log);
+                call.setString("VCTYPE_ERROR", String.valueOf(tipo));
+                call.setString("VCAPLICATIVO", aplicativo);
+                call.setString("VCTRANSACCION", transaccion);
+                call.setString("VCESTADOTRANSACCION", estadoTransaccion);
+
+                //Parametros de Salida
+                call.registerOutParameter("vcestadoproceso", OracleType.VARCHAR2);
+                call.registerOutParameter("vcmensajeproceso", OracleType.VARCHAR2);
+                call.execute();
+                call.close();
+      }
+      return new DatabaseResultDto<>(DatabaseResultStatus.SUCCESS, "Consulta realizada correctamente", resultado);
+ 
+      }catch (Exception e){
+            return new DatabaseResultDto<>(DatabaseResultStatus.WARNING, "Error no controlado en CrearDirectorioDao.obtenerTipoDocumentosDet, causado por: " + e.getMessage());
+      }
     }
 
 }

@@ -32,5 +32,12 @@ public class SessionUtils {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         return request.getRemoteAddr();
     }
+    
+     public static String getUrlContext() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        return request.getScheme()+"://"+ request.getServerName()+":" +request.getLocalPort();
+     
+    }
+
 
 }

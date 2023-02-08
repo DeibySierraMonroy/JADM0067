@@ -1,161 +1,161 @@
 package com.co.activos.jadm0067.bean;
 
-import static co.com.activos.jadm0065.util.primefaces.dialogs.DialogServices.showDefaultDialog;
-import co.com.activos.jadm0065.util.strings.CustomStringUtils;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.AcuerdoPorAgrupacion;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.AgrupacionAtributo;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.AgrupacionEmpresa;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.ContactoSucursal;
+import static co.com.activos.jadm0067.util.primefaces.dialogs.DialogServices.showDefaultDialog;
 import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.Empresa;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.EmpresaPrincipal;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.NotaPorAgrupacionEmpresa;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.ObservacionesGenerales;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.ResponsableEmpresa;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.ResponsableInterno;
-import com.co.activos.jadm0067.Entities.AcuerdoEmpresa.SucursalEmpresa;
+import com.co.activos.jadm0067.Entities.Causales;
 import com.co.activos.jadm0067.Entities.CedulaPeritaje;
 import com.co.activos.jadm0067.Entities.DatabaseResultDto;
+import com.co.activos.jadm0067.Entities.DatosTaxonomia;
+import com.co.activos.jadm0067.Entities.EstadisticasAnalista;
 import com.co.activos.jadm0067.Entities.InformacionPeritaje;
 import com.co.activos.jadm0067.Entities.LibroIngresoDocumentoDto;
 import com.co.activos.jadm0067.Entities.LibroIngresoDto;
+import com.co.activos.jadm0067.Enum.DatabaseResultStatus;
 import static com.co.activos.jadm0067.Enum.DatabaseResultStatus.ERROR;
 import static com.co.activos.jadm0067.Enum.DatabaseResultStatus.SUCCESS;
-import com.co.activos.jadm0067.Repositories.DocumentsRepo;
-import com.co.activos.jadm0067.Repositories.LibroIngresoRepo;
 import com.co.activos.jadm0067.Repositories.MesaContratoRepo;
 import com.co.activos.jadm0067.Utilities.SessionUtils;
-import java.io.IOException;
+import static com.co.activos.jadm0067.Utilities.SessionUtils.getParameterValue;
+import com.co.activos.jadm0067.Utilities.UsuarioSesionController;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-import org.primefaces.PrimeFaces;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.ToggleEvent;
+import org.primefaces.model.charts.line.*;
 
 @Named
 @ViewScoped
 public class mesaContratosBean implements Serializable {
 
+    /*Declaracion de Atributos*/
     private String estadoCedula = "EMC";
-    private HashMap permisoVista;
     private String estadoResponsable = "";
-    private List<String> Estados;
-    private String Estado;
+    private String Estado = "AMC";
     private String Causales;
     private String observacion;
-    private CedulaPeritaje cedulaPeritaje;
-    private List<CedulaPeritaje> cedulasPeritaje;
-    private List<ResponsableInterno> responsableInternos;
-    private List<AgrupacionEmpresa> agrupacionEmpresas;
-    private AgrupacionEmpresa agrupacion;
-    private List<ObservacionesGenerales> observacionesGeneraleses;
-    private List<ResponsableEmpresa> responsableEmpresas;
-    private List<AcuerdoPorAgrupacion> acuerdoPorAgrupacions;
-    private List<SucursalEmpresa> sucursal;
-    private List<ContactoSucursal> contactoSucur;
-    private List<EmpresaPrincipal> empresaPrincipals;
-    private List<AgrupacionAtributo> agrupacionAtributos;
-    private List<NotaPorAgrupacionEmpresa> agrupacionEmpresas1;
-    private InformacionPeritaje informacionAsociada;
-    private Empresa empresa;
-    private static HttpSession sesion;
     private String sesionActiva;
-    private AcuerdoPorAgrupacion acuerdoPorAgrupacion;
-
-    /*   
-   * @author Francisco Javier Rincon (nValue)
- * @version 1.0
- * @since JDK 1.8
-     */
     private String libConsecutivo;
     private String usuario;
     private String ipUsuario;
-    private LibroIngresoDto libroIngreso;
-    private List<LibroIngresoDocumentoDto> documentos;
-    private LibroIngresoDocumentoDto documentoSelect;
     private String documentUrl;
+    private Integer totalCandidatos;
+    private boolean opcionesNoAprobado = false;
+    private String observacionFinal;
+    private String redireccion;
+    private String observacionCedulaPeritaje;
 
-    @Inject
-    private LibroIngresoRepo libroIngresoRepo;
+    /*Declaracion de objetos*/
+    private CedulaPeritaje cedulaPeritaje;
+    private EstadisticasAnalista analista;
+    private InformacionPeritaje informacionAsociada;
+    private Empresa empresa;
+    private UsuarioSesionController usuarioSesionController;
+    private LibroIngresoDto libroIngreso;
+    private LibroIngresoDocumentoDto documentoSelect;
+    private Causales causa;
 
-    @Inject
-    private DocumentsRepo documentsRepo;
+    /*Declaracion de listas*/
+    private List<CedulaPeritaje> cedulasPeritaje;
 
+    private List<LibroIngresoDocumentoDto> documentos;
+    private List<Causales> causalesList;
+
+    /*Declaracion de utilitarios*/
+    private HashMap permisoVista;
+    private LineChartModel lineModel;
+    private List<LocalDate> range;
+
+    /* Variables estaticas para cosntruit la url */
+    private final String urlRutaPrograma = "java -DgetResponse=S -cp C:/Genial/Geniexec/jadm0047.jar co.com.activos.jadm0047.ExecuteUrlMain";
+    private DatosTaxonomia datosTaxonomia;
+    private final String nombreDocumento = "CONTRATO-INTEGRAL.pdf";
+    private final Integer idDocumento = 10;
+    /*10 = CONTRATO INTEGRAL*/
+    private final String flujoPrincipal = "CONTRATOS";
+    private final String tpProceso = "PC";
+    private final String mensaje = "CTO_NUMERO";
+    private String urlCotext = SessionUtils.getUrlContext();
+    private StringBuilder path = new StringBuilder(urlCotext);
+
+
+    /*Inyecion de dependencias*/
     @Inject
     private MesaContratoRepo contratoRepo;
 
+    /*Metodo inicial del bean */
     @PostConstruct
     public void init() {
-            libConsecutivo = "1496102";
-        cedulasPeritaje = new ArrayList<>();
-        listarCedulasPeritaje();
-        this.sesion = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        this.sesionActiva = (String) sesion.getAttribute("USS_ID_SESSION");
-        cedulaPeritaje = new CedulaPeritaje();
-        agrupacion = new AgrupacionEmpresa();
-       
-        ipUsuario = SessionUtils.getRemoteAddr();
+        /*Metodo encargado inicializar los valores*/
+        inicializacion();
+
+        /*Metodo encargado de validar el estado del analista*/
         estadoDelAnalista();
-        Estados = Arrays.asList("NAM", "AMC");
 
     }
 
-    public void estadoDelAnalista() {
-        cedulaPeritaje = new CedulaPeritaje();
-        try {
-            DatabaseResultDto<?> databaseResultDto = contratoRepo.consultarEstadoAnalista(this.sesionActiva);
-            if (databaseResultDto.getMessage().equals("V")) {
-                permisoEstadoVisualizacion();
-                cedulaPeritaje.setLib_consecutivo(databaseResultDto.getResultLong());
-                informacionPeritaje();
-                DatabaseResultDto<Empresa> informacionEmpresa = contratoRepo.consultarEmpresa(informacionAsociada.getTdc_td(), informacionAsociada.getEmp_nd());
-                informacionEmpresaAcuerdo();
-                responsableInternoCliente();
-                sucursalEmpresa();
-                contactoSucursalEmpresa();
-                consultarPrincipal();
-                consultarAgrupacionEmpresa();
-                consultarResponsableEmpresa();
-                consultarObservacionesGenerales();
-                obtenerDocumentos();
-                this.estadoCedula = "RMC";
+    public void inicializacion() {
+        /*Metodo encargado de traer la session del usuario*/
+        usuarioSesionController = (UsuarioSesionController) getParameterValue("informacionUsuario");
+        sesionActiva = usuarioSesionController.getUsuarioSesion().getUsuUsuario();
 
-                //  this.cedulaPeritaje.setLib_consecutivo(databaseResultDto.getResultLong());
-            } else {
-                permisoEstadoSeleccion();
-                listarCedulasPeritaje();
+        /*Metodo encargado de traer la ip del usuario*/
+        ipUsuario = SessionUtils.getRemoteAddr();
 
-            }
-
-        } catch (Exception e) {
-            System.out.println("Eror al traer la data " + e.getMessage());
-        }
+        /* Obtiene la estadisticas del analista */
+        estadisticasAnalista();
 
     }
 
+
+    /* Metodo encargado de cargar las cedulas disponibles en estado EMC*/
     public void listarCedulasPeritaje() {
         cedulasPeritaje = new ArrayList<>();
         try {
             DatabaseResultDto<CedulaPeritaje> cedulasObtenidas = contratoRepo.consultarCedulasPeritaje(this.estadoCedula);
             if (cedulasObtenidas.getStatus().equals(SUCCESS)) {
                 cedulasPeritaje = cedulasObtenidas.getListResult();
+                totalCandidatos = cedulasPeritaje.size();
             }
         } catch (Exception e) {
             System.out.println("Error al traer la cedulas " + e.getMessage());
         }
     }
 
+
+    /* Metodo encargado de validar el estado del analista*/
+    public String estadoDelAnalista() {
+        String redireccion = "";
+        cedulaPeritaje = new CedulaPeritaje();
+        try {
+            DatabaseResultDto<?> databaseResultDto = contratoRepo.consultarEstadoAnalista(this.sesionActiva);
+            if (databaseResultDto.getMessage().equals("V")) {
+                cedulaPeritaje.setLib_consecutivo(databaseResultDto.getResultLong());
+                informacionPeritaje();
+                this.estadoCedula = "RMC";
+                redireccion = "visualizacion?faces-redirect=true";
+            } else {
+                listarCedulasPeritaje();
+                redireccion = "seleccion?faces-redirect=true";
+            }
+        } catch (Exception e) {
+            System.out.println("Eror al traer la data " + e.getMessage());
+        }
+        return redireccion;
+    }
+
+
+    /*Metodo encargado de traer la informacion de la empresa y informacion candidato*/
     public void informacionPeritaje() {
         informacionAsociada = new InformacionPeritaje();
         try {
@@ -163,457 +163,228 @@ public class mesaContratosBean implements Serializable {
                 DatabaseResultDto<InformacionPeritaje> databaseResultDto = contratoRepo.consultarDatosPeritaje(cedulaPeritaje.getLib_consecutivo());
                 if (databaseResultDto.getStatus().equals(SUCCESS)) {
                     informacionAsociada = databaseResultDto.getSingleResult();
+                    observacionCedulaPeritaje = consultarObservacion(cedulaPeritaje.getLib_consecutivo(), "EMC");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("informacionAsociadaBean", informacionAsociada);
                 }
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("LIB_CONSECUTIVO", informacionAsociada.getLib_consecutivo());
             }
         } catch (Exception e) {
             System.err.println("Error en informacionPeritaje " + e.getMessage());
         }
     }
 
-    public void informacionEmpresaAcuerdo() {
-
-        try {
-            DatabaseResultDto<Empresa> informacionEmpresa
-                    = contratoRepo.consultarEmpresa(informacionAsociada.getTdc_td(), informacionAsociada.getEmp_nd());
-            if (informacionEmpresa.getStatus().equals(SUCCESS)) {
-                empresa = informacionEmpresa.getSingleResult();
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                        (String) informacionEmpresa.getMessage()));
-            }
-
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                    "Error no controlado al obtener la información de acuerdo cliente: " + e.getMessage()));
-            e.printStackTrace();
-        }
-    }
-
-    /*
-    Funcion que permite validar los permisos en una estado de Seleccion del analista de mesa de contratos
-     */
-    public void permisoEstadoSeleccion() {
-        permisoVista = new HashMap<>();
-        permisoVista.put("historialEmpleado", Boolean.TRUE);
-        permisoVista.put("seleccionCandidato", Boolean.TRUE);
-        permisoVista.put("estadoFlujo", 0);
-
-    }
-
-    public void permisoEstadoVisualizacion() {
-        permisoVista = new HashMap<>();
-        permisoVista.put("historialEmpleado", Boolean.TRUE);
-        permisoVista.put("seleccionCandidato", Boolean.FALSE);
-        permisoVista.put("estadoFlujo", 1);
-        permisoVista.put("EstadoVisualizacion", Boolean.TRUE);
-
-    }
-
-    public void Visualizacion() {
-        permisoVista = new HashMap<>();
-        permisoVista.put("historialEmpleado", Boolean.FALSE);
-        permisoVista.put("seleccionCandidato", Boolean.FALSE);
-        permisoVista.put("EstadoVisualizacion", Boolean.FALSE);
-        permisoVista.put("visualizacionDocumentos", Boolean.TRUE);
-        permisoVista.put("estadoFlujo", 1);
-    }
-
     /*
     Funcion que permite almacenar la informacion de cedula peritaje al procedimiento Pl_almacenar_cedula_peritaje
      */
-    public void seleccionCandidato(String accion) {
+    public String seleccionCandidato(String accion) {
+        String redireccion = "";
         try {
             if (accion.equals("Seleccionar")) {
                 DatabaseResultDto<?> databaseResultDto = contratoRepo.guardarCedulaPeritaje(this.sesionActiva, "V", Integer.parseInt(informacionAsociada.getLib_consecutivo()));
                 if (databaseResultDto.getStatus().equals(SUCCESS) && databaseResultDto.getMessage().equals("S")) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info !", (String) databaseResultDto.getSingleResult()));
-                    informacionEmpresaAcuerdo();
-                    responsableInternoCliente();
-                    sucursalEmpresa();
-                    contactoSucursalEmpresa();
-                    consultarPrincipal();
-                    Visualizacion();
-                    consultarAgrupacionEmpresa();
-                    consultarResponsableEmpresa();
-                    consultarObservacionesGenerales();
-                    consultarNota();
-                    agrupacionSeleccionada();
-                    obtenerDocumentos();
-
+                    informacionPeritaje();
+                    redireccion = "mesaContratos?faces-redirect=true";
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !", (String) databaseResultDto.getSingleResult()));
                     listarCedulasPeritaje();
                     informacionAsociada = new InformacionPeritaje();
+                    cedulaPeritaje.setEpl_nd(null);
                 }
             } else {
-
-                Visualizacion();
-
+                redireccion = "mesaContratos?faces-redirect=true";
             }
         } catch (Exception e) {
             System.err.println("Error al almacenar la informacion " + e.getMessage());
         }
-
+        return redireccion;
     }
 
-    public void responsableInternoCliente() {
-
-        try {
-            DatabaseResultDto<ResponsableInterno> informacionResponsableInterno
-                    = contratoRepo.consultarResponsableInternoEmpresa(empresa.getEMP_ACU_CODIGO());
-            if (informacionResponsableInterno.getStatus().equals(SUCCESS)) {
-                responsableInternos = (List<ResponsableInterno>) informacionResponsableInterno.getListResult();
-
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                        (String) informacionResponsableInterno.getMessage()));
-            }
-
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                    "Error no controlado al obtener la información de acuerdo cliente: " + e.getMessage()));
-            e.printStackTrace();
-        }
-
+    public void respuestaDelProceso() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info !", "Proceso Finalizado con Exito !."));
     }
 
-    public void sucursalEmpresa() {
-
+    public void estadisticasAnalista() {
+        analista = new EstadisticasAnalista();
         try {
-            DatabaseResultDto<SucursalEmpresa> sucursalEmpresa
-                    = contratoRepo.consultarSucursalEmpresa(empresa.getEMP_ACU_CODIGO());
-            if (sucursalEmpresa.getStatus().equals(SUCCESS)) {
-                sucursal = sucursalEmpresa.getListResult();
-            } else {
-                sucursal = new ArrayList<>();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                        (String) sucursalEmpresa.getMessage()));
-            }
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                    "Error no controlado al obtener la información de sucursal Empresa : " + e.getMessage()));
-            e.printStackTrace();
-        }
-
-    }
-
-    public void contactoSucursalEmpresa() {
-
-        try {
-            DatabaseResultDto<ContactoSucursal> contactoSucursal
-                    = contratoRepo.consultarContactoSucursal(Integer.parseInt(sucursal.get(0).getSUE_CODIGO()));
-            if (contactoSucursal.getStatus().equals(SUCCESS)) {
-                contactoSucur = contactoSucursal.getListResult();
-            } else {
-                contactoSucur = new ArrayList<>();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                        (String) contactoSucursal.getMessage()));
-            }
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                    "Error no controlado al obtener la información de contacto Sucursal Empresa: " + e.getMessage()));
-            e.printStackTrace();
-        }
-
-    }
-
-    public void consultarPrincipal() {
-
-        try {
-            DatabaseResultDto<EmpresaPrincipal> principal = contratoRepo.consultarEmpresaPrincipal(empresa.getTDC_TD_FIL(),
-                    empresa.getEMP_ND_FIL().toString());
-            if (principal.getStatus().equals(SUCCESS)) {
-                empresaPrincipals = principal.getListResult();
-            } else {
-                contactoSucur = new ArrayList<>();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                        (String) principal.getMessage()));
-            }
-
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                    "Error no controlado al obtener la información de contacto Sucursal Empresa: " + e.getMessage()));
-            e.printStackTrace();
-        }
-
-    }
-
-    public void consultarAgrupacionEmpresa() {
-
-        try {
-            DatabaseResultDto<AgrupacionEmpresa> agrupacion = contratoRepo.consultarAgrupacionEmpresa(empresa.getEMP_ACU_CODIGO());
-            if (agrupacion.getStatus().equals(SUCCESS)) {
-                agrupacionEmpresas = agrupacion.getListResult();
-            } else {
-                agrupacionEmpresas = new ArrayList<>();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                        (String) agrupacion.getMessage()));
-            }
-
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                    "Error no controlado al obtener la información de Agrupacion Empresa: " + e.getMessage()));
-            e.printStackTrace();
-        }
-
-    }
-
-    public void consultarResponsableEmpresa() {
-
-        try {
-            DatabaseResultDto<ResponsableEmpresa> responsable = contratoRepo.consultarResponsableEmpresa(empresa.getEMP_ACU_CODIGO(),
-                    agrupacionEmpresas.get(1).getAOR_CODIGO());
-            if (responsable.getStatus().equals(SUCCESS)) {
-                responsableEmpresas = responsable.getListResult();
-            } else {
-                responsableEmpresas = new ArrayList<>();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                        (String) responsable.getMessage()));
-            }
-
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                    "Error no controlado al obtener la información Responsable Empresa: " + e.getMessage()));
-            e.printStackTrace();
-        }
-
-    }
-
-    public void consultarObservacionesGenerales() {
-
-        try {
-            DatabaseResultDto<ObservacionesGenerales> observaciones = contratoRepo.consultarObservacionesGenerales(empresa.getEMP_ACU_CODIGO());
-            if (observaciones.getStatus().equals(SUCCESS)) {
-                observacionesGeneraleses = observaciones.getListResult();
-            } else {
-                observacionesGeneraleses = new ArrayList<>();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                        (String) observaciones.getMessage()));
-            }
-
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                    "Error no controlado al obtener la información de Observaciones Generales " + e.getMessage()));
-            e.printStackTrace();
-        }
-
-    }
-
-    public void agrupacionSeleccionada() {
-
-        try {
-            DatabaseResultDto<AcuerdoPorAgrupacion> databaseResultDto = contratoRepo.consultarAcuerdoPorAgrupacion(empresa.getEMP_ACU_CODIGO(), agrupacion.getAGA_CODIGO());
+            DatabaseResultDto<EstadisticasAnalista> databaseResultDto = contratoRepo.consultarEstadisticaAnalista(this.sesionActiva);
             if (databaseResultDto.getStatus().equals(SUCCESS)) {
-                acuerdoPorAgrupacions = databaseResultDto.getListResult();
-                consultarNota();
-
-                agrupacionAtributos = new ArrayList<>();
-                acuerdoPorAgrupacion = new AcuerdoPorAgrupacion();
-
-            } else {
-                observacionesGeneraleses = new ArrayList<>();
-               
+                analista = databaseResultDto.getSingleResult();
             }
         } catch (Exception e) {
-            e.getStackTrace();
-        }
-    }
-
-    public void agrupacionAtributoSeleccionado(SelectEvent<AcuerdoPorAgrupacion> event) {
-
-        try {
-            DatabaseResultDto<AgrupacionAtributo> databaseResultDto
-                    = contratoRepo.consultarAgrupacionAtributo(acuerdoPorAgrupacion.getACC_CODIGO());
-            if (databaseResultDto.getStatus().equals(SUCCESS)) {
-                agrupacionAtributos = databaseResultDto.getListResult();
-
-            } else {
-                agrupacionAtributos = new ArrayList<>();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !",
-                        (String) databaseResultDto.getMessage()));
-            }
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-    }
-
-    public void consultarNota() {
-
-        try {
-            DatabaseResultDto<NotaPorAgrupacionEmpresa> databaseResultDto = contratoRepo.consultarNotaPorAgrupacion(agrupacion.getAGA_CODIGO());
-            if (databaseResultDto.getStatus().equals(SUCCESS)) {
-                agrupacionEmpresas1 = databaseResultDto.getListResult();
-
-            } else {
-                agrupacionEmpresas1 = new ArrayList<>();
-                
-            }
-        } catch (Exception e) {
-            e.getStackTrace();
+            System.err.println("Error al traer  las estadisticas " + e.getMessage());
         }
 
     }
 
-    public void cambioEstadoCandidato() {
-        System.out.println("com.co.activos.jadm0067.bean.mesaContratosBean.cambioEstadoCandidato()");
-    }
-
-    public void closeDialog() {
-        System.out.println("LLego");
-        PrimeFaces current = PrimeFaces.current();
-        current.executeScript("PF('cambioEstado').hide();");
-
-    }
-
-    public void enviarCandidatoFirmar() throws IOException {
-        System.out.println("LLego");
-        PrimeFaces current = PrimeFaces.current();
-        System.out.println("Estado : " + getEstado()
-                + " Causal : " + getCausal()
-                + " Texto  : " + getObservacion()
-        );
-        current.executeScript("PF('cambioEstado').hide();");
-        init();
-        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        context.redirect("mesaContratos.xhtml");
-    }
-
-    public void handleToggle(ToggleEvent event) {
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Toggled", "Visibility:" + event.getVisibility());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    /*   
-   * @author Francisco Javier Rincon (nValue)
- * @version 1.0
- * @since JDK 1.8
-     */
-//    public void getParameters() {
-//        try {
-//            libConsecutivo = "1496102";
-//            usuario = this.sesionActiva;
-//            if (CustomStringUtils.anyItemIsNullOrEmpty(libConsecutivo, usuario)) {
-//                showDefaultDialog("Alerta", "Loa parámetros de libro de ingreso y usuario, son obligatorios para ejecutar este modulo");
-//            } else {
-//                obtenerLibroIngreso();
-//            }
-//        } catch (Exception e) {
-//            showDefaultDialog(ERROR.name(), "Error no controlado al obtener los parámetros de sesión de este modulo, causado por: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
-    /**
-     * Obtiene la informacion detallada del libro de ingreso
-     */
-//    public void obtenerLibroIngreso() {
-//        libroIngreso = null;
-//        try {
-//            DatabaseResultDto<LibroIngresoDto> libroIngresoResult = libroIngresoRepo.getById(Long.valueOf(1496102));
-//            if (!libroIngresoResult.getStatus().equals(SUCCESS)) {
-//                showDefaultDialog(ERROR.name(), libroIngresoResult.getMessage());
-//            } else {
-//                libroIngreso = libroIngresoResult.getSingleResult();
-//                if (Objects.isNull(libroIngreso.getLibConsecutivo())) {
-//                    showDefaultDialog("Alerta", "No se encontro información en la base de datos para este libro");
-//                    return;
-//                }
-//                obtenerDocumentos();
-//            }
-//        } catch (Exception e) {
-//            showDefaultDialog(ERROR.name(), "Error no controlado al obtener la información de este libro de ingreso, causado por: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
-    /**
-     * Inserta y actualiza todos los documentos asociados a un libro de ingreso
-     *
-     * @return false si el procedimiento termina con error de lo contrario
-     * retorna true
-     */
-    public boolean sincronizarDocumentos() {
+    public String aprobarCandidato() {
         try {
-
-            DatabaseResultDto<?> syncResult = documentsRepo.synchronizedDocuments(Long.valueOf(libConsecutivo));
-            if (!syncResult.getStatus().equals(SUCCESS)) {
-                showDefaultDialog(ERROR.name(), syncResult.getMessage());
-                return Boolean.FALSE;
-            }
-            return Boolean.TRUE;
-        } catch (Exception e) {
-            showDefaultDialog(ERROR.name(), "Error no controlado al sincronizar los documentos para este libro de ingreso, causado por: " + e.getMessage());
-            e.printStackTrace();
-            return Boolean.FALSE;
-        }
-    }
-
-    /**
-     * Obtiene el listado de los documentos requeridos
-     */
-    private void obtenerDocumentos() {
-        documentos = new ArrayList<>();
-        documentoSelect = null;
-        try {
-            if (!sincronizarDocumentos()) {
-                return;
-            }
-            DatabaseResultDto<LibroIngresoDocumentoDto> documentosResult = documentsRepo.getAllDocuments(Long.valueOf(1496102));
-            if (!documentosResult.getStatus().equals(SUCCESS)) {
-                showDefaultDialog(ERROR.name(), documentosResult.getMessage());
-            } else {
-                documentos = documentosResult.getListResult();
-            }
-        } catch (Exception e) {
-            showDefaultDialog(ERROR.name(), "Error no controlado al obtener los documentos para este libro de ingreso, causado por: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Actualiza el estado de un documento en la base de datos
-     */
-    public void actualizarEstadoDocumento(LibroIngresoDocumentoDto document) {
-        try {
-            DatabaseResultDto<?> updateDocumentResult = documentsRepo.updateDocument(document);
-            if (!updateDocumentResult.getStatus().equals(SUCCESS)) {
-                showDefaultDialog(ERROR.name(), updateDocumentResult.getMessage());
-            } else {
-                obtenerDocumentos();
-                documentoSelect = document;
-                getFullDocumentUrl();
-                showDefaultDialog("Notificación", "Estado del documento, actualizado correctamente.");
-            }
-        } catch (Exception e) {
-            showDefaultDialog(ERROR.name(), "Error no controlado al obtener los documentos para este libro de ingreso, causado por: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Obtiene la URL para el documento seleccionado
-     */
-    public void ObtenerUrl() {
-        System.out.println("Entro");
-
-    }
-
-    public void getFullDocumentUrl() {
-        documentUrl = null;
-        try {
-            if (!Objects.isNull(documentoSelect.getDataErpAz().getAzdCodigoCli())) {
-                DatabaseResultDto<String> urlResult = documentsRepo.getUrlDocument(usuario, ipUsuario, documentoSelect.getDataErpAz().getAzdCodigoCli());
-                if (!urlResult.getStatus().equals(SUCCESS)) {
-                    showDefaultDialog(ERROR.name(), urlResult.getMessage());
+            if (this.observacionFinal != "" && !this.observacionFinal.isEmpty()) {
+                DatabaseResultDto<?> result = contratoRepo.finalizarProceso(
+                        Long.parseLong(informacionAsociada.getLib_consecutivo()),
+                        "PFC", this.observacionFinal, this.sesionActiva, 67);
+                if (result.getMessage().equals("S")) {
+                    redireccion = "seleccion?faces-redirect=true";
+                    firmarArchivosConcatenados(Long.valueOf(informacionAsociada.getLib_consecutivo()),
+                            informacionAsociada.getCorreo_empleado(), "desierra@activos.com.co", sesionActiva);
                 } else {
-                    documentUrl = urlResult.getSingleResult();
+                    redireccion = "";
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !", "El Proceso no se pudo Finalizar con Exito !. " + result.toString()));
                 }
+            } else {
+                redireccion = "";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !", "La observacion no puede ir vacia , verifique de nuevo!. "));
             }
         } catch (Exception e) {
-            showDefaultDialog(ERROR.name(), "Error no controlado al obtener la url para este documento, causado por: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("Error al aprobar el candidato" + e.getMessage());
         }
+        return redireccion;
+    }
+
+    public String rechazarCandidato() {
+        try {
+            if (this.observacionFinal != "" && !this.observacionFinal.isEmpty()) {
+                DatabaseResultDto<?> result = contratoRepo.finalizarProceso(Long.parseLong(informacionAsociada.getLib_consecutivo()),
+                        this.Estado, this.observacionFinal, this.sesionActiva, this.causa.getCodigo_causal());
+                if (result.getMessage().equals("S")) {
+                    redireccion = "seleccion?faces-redirect=true";
+                } else {
+                    redireccion = "";
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !", "El Proceso no se pudo Finalizar con Exito !."));
+                }
+            } else {
+                redireccion = "";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !", "El Proceso no se pudo Finalizar debido a que la observacion o el tipo de causal no puede ir vacios , verifique de nuevo! !."));
+            }
+        } catch (Exception e) {
+            System.out.println("Error al rechazar el candidato" + e.getMessage());
+        }
+        return redireccion;
+
+    }
+
+    public String enviarCandidatoFirmar() {
+        String redireccionar = "";
+        try {
+            if (Estado.equals("AMC")) {
+                redireccionar = aprobarCandidato();
+            }
+            if (Estado.equals("NAM")) {
+                redireccionar = rechazarCandidato();
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error !", "Al escoger el estado .!. " + e.getCause()));
+        }
+        return redireccionar;
+
+    }
+
+    public void cambiarEstadoFinal() {
+        if (this.Estado.equals("NAM")) {
+            this.opcionesNoAprobado = true;
+            causales();
+        } else {
+            this.opcionesNoAprobado = false;
+        }
+    }
+
+    public void seleccionarCausal() {
+        if (this.Estado.equals("NAM")) {
+            this.observacionFinal = this.causa.getDescripcion_causal() + "\n";
+        }
+    }
+
+    public void causales() {
+        this.causalesList = new ArrayList<>();
+        try {
+            DatabaseResultDto<Causales> causal = contratoRepo.consultarCausales();
+            if (causal.getStatus().equals(SUCCESS)) {
+                this.causalesList = causal.getListResult();
+            } else {
+                this.causalesList = new ArrayList<>();
+                System.err.println("Error en : " + causal.getMessage());
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+
+    }
+
+    public String consultarObservacion(Long NMLIBCONSECUTIVO, String VCSTDOESTADO) {
+        String observacionCedula = "";
+        try {
+            DatabaseResultDto<String> databaseResultDto
+                    = contratoRepo.consultarObservacionCedulaPeritaje(NMLIBCONSECUTIVO, VCSTDOESTADO);
+            if (databaseResultDto.getStatus().equals(SUCCESS)) {
+                observacionCedula = databaseResultDto.getMessage();
+            } else {
+                observacionCedula = "";
+            }
+        } catch (Exception e) {
+            System.out.println("Error al traer la informacion de Consultar las observaciones.");
+        }
+        return observacionCedula;
+    }
+
+    public void firmarArchivosConcatenados(Long NMLIBCONSECUTIVO, String correoEmpleado, String correoResponsable, String usuResponsable) {
+
+        try {
+            // 1.Obtenemos el AzCodigoCli y DeaCodigo de la carpeta del usuario al cual se esta evaluando.
+            DatabaseResultDto<?> databaseResultDto = contratoRepo.obtenerCarpetaDeContratacion(NMLIBCONSECUTIVO, flujoPrincipal, tpProceso);
+            if (!databaseResultDto.getStatus().equals(SUCCESS)) {
+                System.out.println("Error al consultar la carpeta del candidato");
+            }
+            datosTaxonomia = (DatosTaxonomia) databaseResultDto.getSingleResult();
+            // 2.Obtenemos el context path del aplicativo  path + concatenado con la url del servlet
+            path.append("/JADM0056/ServletConcatenarDocumentos?");
+            // 3. Enviamos los parametros de DeaCodigo y AzCodigoCli
+            path.append("DEA_CODIGO=").append(datosTaxonomia.getDeaCodigo()).append("&");
+            // 4. Enviamos el idDocumento que se obtiene de la tabla adm.tipo_documento
+            path.append("PRD_CODIGO=").append(idDocumento).append("&");
+            // 5. Enviamos el tipo de flujo.    
+            path.append("TIPO_FLUJO=").append(flujoPrincipal).append("&");
+            // 6. Enviamos el nombre del documento.
+            path.append("NOMBRE_ARCHIVO=").append(nombreDocumento).append("&");
+            // 7. Enviamos el nombre del documento.
+            path.append("MENSAJE=").append(mensaje + " " + informacionAsociada.getNumero_contrato()).append("&");
+            // 8. Enviamos el nombre del documento.
+            path.append("CORREOEMPLEADO=").append(correoEmpleado).append("&");
+            // 9. Enviamos el nombre del documento.
+            path.append("CORREORESPONSABLE=").append(correoResponsable).append("&");
+            // 10. Enviamos el nombre del documento.
+            path.append("LIB_CONSECUTIVO=").append(informacionAsociada.getLib_consecutivo()).append("&");
+            // 11. Enviamos el nombre del documento.
+            path.append("USU_USUARIO=").append(sesionActiva);
+            // 12. Enviamos el nombre del documento.
+
+            //Construimos y ejecutamos la url 
+            Process proc = Runtime.getRuntime().exec(urlRutaPrograma + " \"" + path + "\"");
+            System.out.println("Ruta final : " + urlRutaPrograma + " \"" + path + "\"");
+
+            BufferedReader respuestaExistosa = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            String respuesta = null;
+            while (Objects.nonNull(respuesta = respuestaExistosa.readLine())) {
+                System.out.println("Repuesta : " + respuesta);
+            }
+            contratoRepo.crearAuditoria(respuesta, DatabaseResultStatus.SUCCESS, "JADM0067:mesaContratosBean:firmarArchivosConcatenados",String.valueOf(NMLIBCONSECUTIVO), "OK");
+
+        } catch (Exception e) {
+            showDefaultDialog(ERROR.name(), "Error no controlado al enviar a firmarArchivosConcatenados, causado por: " + e.getMessage());
+            e.printStackTrace();
+
+        }
+
     }
 
     //GETTER AND SETTER OF LOCAL VARS
+    public List<LocalDate> getRange() {
+        return range;
+    }
+
+    public void setRange(List<LocalDate> range) {
+        this.range = range;
+    }
+
     public String getLibConsecutivo() {
         return libConsecutivo;
     }
@@ -676,14 +447,6 @@ public class mesaContratosBean implements Serializable {
 
     public void setPermisoVista(HashMap permisoVista) {
         this.permisoVista = permisoVista;
-    }
-
-    public List<String> getEstados() {
-        return Estados;
-    }
-
-    public void setEstados(List<String> estados) {
-        Estados = estados;
     }
 
     public String getEstado() {
@@ -766,100 +529,84 @@ public class mesaContratosBean implements Serializable {
         this.empresa = empresa;
     }
 
-    public List<ResponsableInterno> getResponsableInternos() {
-        return responsableInternos;
+    public LineChartModel getLineModel() {
+        return lineModel;
     }
 
-    public void setResponsableInternos(List<ResponsableInterno> responsableInternos) {
-        this.responsableInternos = responsableInternos;
+    public void setLineModel(LineChartModel lineModel) {
+        this.lineModel = lineModel;
     }
 
-    public List<SucursalEmpresa> getSucursal() {
-        return sucursal;
+    public Integer getTotalCandidatos() {
+        return totalCandidatos;
     }
 
-    public void setSucursal(List<SucursalEmpresa> sucursal) {
-        this.sucursal = sucursal;
+    public void setTotalCandidatos(Integer totalCandidatos) {
+        this.totalCandidatos = totalCandidatos;
     }
 
-    public List<ContactoSucursal> getContactoSucur() {
-        return contactoSucur;
+    public boolean getOpcionesNoAprobado() {
+        return opcionesNoAprobado;
     }
 
-    public void setContactoSucur(List<ContactoSucursal> contactoSucur) {
-        this.contactoSucur = contactoSucur;
+    public void setOpcionesNoAprobado(boolean opcionesNoAprobado) {
+        this.opcionesNoAprobado = opcionesNoAprobado;
     }
 
-    public List<EmpresaPrincipal> getEmpresaPrincipals() {
-        return empresaPrincipals;
+    public List<Causales> getCausalesList() {
+        return causalesList;
     }
 
-    public void setEmpresaPrincipals(List<EmpresaPrincipal> empresaPrincipals) {
-        this.empresaPrincipals = empresaPrincipals;
+    public void setCausalesList(List<Causales> causalesList) {
+        this.causalesList = causalesList;
     }
 
-    public List<AgrupacionEmpresa> getAgrupacionEmpresas() {
-        return agrupacionEmpresas;
+    public Causales getCausa() {
+        return causa;
     }
 
-    public void setAgrupacionEmpresas(List<AgrupacionEmpresa> agrupacionEmpresas) {
-        this.agrupacionEmpresas = agrupacionEmpresas;
+    public void setCausa(Causales causa) {
+        this.causa = causa;
     }
 
-    public List<ObservacionesGenerales> getObservacionesGeneraleses() {
-        return observacionesGeneraleses;
+    public String getObservacionFinal() {
+        return observacionFinal;
     }
 
-    public void setObservacionesGeneraleses(List<ObservacionesGenerales> observacionesGeneraleses) {
-        this.observacionesGeneraleses = observacionesGeneraleses;
+    public void setObservacionFinal(String observacionFinal) {
+        this.observacionFinal = observacionFinal;
     }
 
-    public List<ResponsableEmpresa> getResponsableEmpresas() {
-        return responsableEmpresas;
+    public EstadisticasAnalista getAnalista() {
+        return analista;
     }
 
-    public void setResponsableEmpresas(List<ResponsableEmpresa> responsableEmpresas) {
-        this.responsableEmpresas = responsableEmpresas;
+    public void setAnalista(EstadisticasAnalista analista) {
+        this.analista = analista;
     }
 
-    public AgrupacionEmpresa getAgrupacion() {
-        return agrupacion;
+    public UsuarioSesionController getUsuarioSesionController() {
+        return usuarioSesionController;
     }
 
-    public void setAgrupacion(AgrupacionEmpresa agrupacion) {
-        this.agrupacion = agrupacion;
+    public void setUsuarioSesionController(UsuarioSesionController usuarioSesionController) {
+        this.usuarioSesionController = usuarioSesionController;
     }
 
-    public List<AcuerdoPorAgrupacion> getAcuerdoPorAgrupacions() {
-        return acuerdoPorAgrupacions;
+    public String getRedireccion() {
+        return redireccion;
     }
 
-    public void setAcuerdoPorAgrupacions(List<AcuerdoPorAgrupacion> acuerdoPorAgrupacions) {
-        this.acuerdoPorAgrupacions = acuerdoPorAgrupacions;
+    public void setRedireccion(String redireccion) {
+        this.redireccion = redireccion;
     }
 
-    public AcuerdoPorAgrupacion getAcuerdoPorAgrupacion() {
-        return acuerdoPorAgrupacion;
+    public String getObservacionCedulaPeritaje() {
+        return observacionCedulaPeritaje;
     }
 
-    public void setAcuerdoPorAgrupacion(AcuerdoPorAgrupacion acuerdoPorAgrupacion) {
-        this.acuerdoPorAgrupacion = acuerdoPorAgrupacion;
-    }
-
-    public List<AgrupacionAtributo> getAgrupacionAtributos() {
-        return agrupacionAtributos;
-    }
-
-    public void setAgrupacionAtributos(List<AgrupacionAtributo> agrupacionAtributos) {
-        this.agrupacionAtributos = agrupacionAtributos;
-    }
-
-    public List<NotaPorAgrupacionEmpresa> getAgrupacionEmpresas1() {
-        return agrupacionEmpresas1;
-    }
-
-    public void setAgrupacionEmpresas1(List<NotaPorAgrupacionEmpresa> agrupacionEmpresas1) {
-        this.agrupacionEmpresas1 = agrupacionEmpresas1;
+    public void setObservacionCedulaPeritaje(String observacionCedulaPeritaje) {
+        this.observacionCedulaPeritaje = observacionCedulaPeritaje;
     }
 
 }

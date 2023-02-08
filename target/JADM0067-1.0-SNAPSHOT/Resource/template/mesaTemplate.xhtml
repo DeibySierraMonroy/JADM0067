@@ -17,9 +17,26 @@
     <h:body>        
         <p:growl id="message" showDetail="true"/>
         <p:tooltip/>
-        <ui:insert name="content"/>
+        <p:dialog id="modalDialog" header="#{sessionScope.dialog.title}" modal="#{sessionScope.dialog.modal}"
+                  widgetVar="genericDialog" showEffect="#{sessionScope.dialog.effect}" styleClass="max-w-lg"
+                  appendTo="@(body)" closeOnEscape="true" resizable="false" draggable="false">
+            <h:form id="formGenericDialog">
+                <div class="ui-g-12">
+                    <div class="p-4">
+                        <p><h:outputText value="#{sessionScope.dialog.text}" escape="false"/></p>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="flex items-center justify-center">
+                        <p:commandButton id="closePopupButton" value="Aceptar" update=":modalDialog"
+                                         process="@this" oncomplete="PF('genericDialog').hide();"/>
 
-
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+        <ui:insert name="content">
+        </ui:insert>
         <p:dialog header="Responsables Internos del Cliente" 
                   widgetVar="responsableInterno" 
                   minHeight="40" 
@@ -27,11 +44,9 @@
                   showEffect="fade"
                   minimizable="true" 
                   maximizable="true"
-
                   >
-
             <p:dataTable var="responsable" 
-                         value="#{mesaContratosBean.responsableInternos}"
+                         value="#{acuerdoEmpresaBean.responsableInternos}"
                          draggableColumns="true"
                          id="tablaResponsables"
                          reflow="true" 
@@ -54,14 +69,7 @@
                     <h:outputText value="#{responsable.RIN_TELEFONO}" />
                 </p:column>
             </p:dataTable>
-
         </p:dialog>
-
-
-
-
-
-
         <p:dialog header="Responsables de la Empresa" 
                   widgetVar="responsableEmpresa" 
                   minHeight="40" 
@@ -70,9 +78,8 @@
                   minimizable="true" 
                   maximizable="true"
                   >
-
             <p:dataTable var="reponsable" 
-                         value="#{mesaContratosBean.responsableEmpresas}"
+                         value="#{acuerdoEmpresaBean.responsableEmpresas}"
                          draggableColumns="true"
                          id="tblresponsabl"
                          reflow="true" 
@@ -94,9 +101,7 @@
                 <p:column headerText="Cargo">
                     <h:outputText value="#{reponsable.RCL_CARGO}" />
                 </p:column>
-
             </p:dataTable>
-
         </p:dialog>
         <p:dialog header="Observaciones Generales" 
                   widgetVar="observacionesGenerales" 
@@ -105,11 +110,9 @@
                   showEffect="fade"
                   minimizable="true" 
                   maximizable="true"
-
                   >
-
             <p:dataTable var="observacion" 
-                         value="#{mesaContratosBean.observacionesGeneraleses}"
+                         value="#{acuerdoEmpresaBean.observacionesGeneraleses}"
                          draggableColumns="true"
                          id="tblObservacionesGenerales"
                          reflow="true" 
@@ -131,11 +134,8 @@
                 <p:column headerText="Fecha">
                     <h:outputText value="#{observacion.AUD_FECHA}" />
                 </p:column>
-
             </p:dataTable>
-
         </p:dialog>
-
         <p:dialog header="Sucursales Empresa" 
                   widgetVar="sucursalEmpresa" 
                   minHeight="40" 
@@ -146,7 +146,7 @@
                   >
 
             <p:dataTable var="sucursal" 
-                         value="#{mesaContratosBean.sucursal}"
+                         value="#{acuerdoEmpresaBean.sucursal}"
                          draggableColumns="true"
                          id="tblsucursalEmpresa"
                          reflow="true" 
@@ -178,7 +178,7 @@
                   >
 
             <p:dataTable var="contacto" 
-                         value="#{mesaContratosBean.contactoSucur}"
+                         value="#{acuerdoEmpresaBean.contactoSucur}"
                          draggableColumns="true"
                          id="tblcontactoSucursal"
                          reflow="true" 
@@ -199,7 +199,6 @@
                 </p:column>
 
             </p:dataTable>
-
         </p:dialog>
         <p:dialog header="Nota Agrupacion" 
                   widgetVar="notaEmpresa" 
@@ -211,14 +210,12 @@
 
                   >
             <p:dataTable var="nota" 
-                         value="#{mesaContratosBean.agrupacionEmpresas1}"
+                         value="#{acuerdoEmpresaBean.agrupacionEmpresas1}"
                          draggableColumns="true"
                          id="tblnotaEmpresa"
                          reflow="true" 
                          scrollable="true"
                          scrollHeight="250"
-
-
                          >
                 <p:column headerText="Codigo">
                     <h:outputText value="#{nota.NOA_CODIGO}" />
@@ -236,25 +233,17 @@
                 </p:column>
 
             </p:dataTable>
-
         </p:dialog>
-
-
-        <p:dialog 
+ <p:dialog 
             widgetVar="statusDialog" 
             modal="true" 
             draggable="false" 
             resizable="false" 
             showHeader="false"
-            showEffect="fade"
             style="border-radius: 6px
             ;border-top-style: solid;border-top-color:#f2a325"
-            width="auto"
-
-            >                  
-
-            <img src="Resource/gif/final.gif" alt="" width="500px"    />
-
-        </p:dialog>
+            width="auto" >                   
+            <img src="Resource/gif/final.gif" alt="" width="500px"/>
+        </p:dialog>     
     </h:body>
 </html>

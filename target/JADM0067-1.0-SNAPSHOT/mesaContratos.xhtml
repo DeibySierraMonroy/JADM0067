@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
@@ -14,406 +13,8 @@ and open the template in the editor.
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="content">
-        <!--        <p:tabMenu activeIndex="0" style="font-family:FontName">
-                    <p:menuitem value="Inicio" outcome="mesaContratos" icon="pi pi-fw pi-home">
-                        <f:param name="i" value="0"/>
-                    </p:menuitem>
-                    <p:menuitem value="Validar Documentos" outcome="validarDocumentos" icon="pi pi-fw pi-home">
-                        <f:param name="i" value="1"/>
-                    </p:menuitem>
-                </p:tabMenu>
-                <br></br>-->
-        <h:form id="form">
-            <p:card style="width:auto" rendered="#{mesaContratosBean.permisoVista.get('historialEmpleado')}">
-                <div class="grid" style="margin: 5px ; padding:0">
-
-                    <div class="col-12 md:col-6 lg:col-4">
-
-                        <div class="surface-card shadow-2 p-3 border-round"
-                             style="border-top-color: #006ba1;border-top-style: solid">
-                            <div class="flex justify-content-between mb-3">
-                                <div>
-                                    <span class="block text-500 font-medium mb-3">Total Candidatos</span>
-                                    <div class="text-900 font-medium align-items-center  text-3xl">#{mesaContratosBean.cedulasPeritaje.size()}</div>
-                                </div>
-                                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                                     style="width:2.5rem;height:2.5rem">
-                                    <i class="pi pi-user text-blue-500 text-xl"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 md:col-6 lg:col-4">
-
-                        <div class="surface-card shadow-2 p-3 border-round"
-                             style="border-top-color: #f57c00;border-top-style: solid">
-                            <div class="flex justify-content-between mb-3">
-                                <div>
-                                    <span class="block text-500 font-medium mb-3">Candidatos Rechazadods</span>
-                                    <div class="text-900 font-medium text-3xl">3</div>
-                                </div>
-                                <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
-                                     style="width:2.5rem;height:2.5rem">
-                                    <i class="pi pi-times text-orange-500 text-xl"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 md:col-6 lg:col-4" id="candidatosAprobados">
-
-                        <div class="surface-card shadow-2 p-3 border-round"
-                             style="border-top-color: #00bcd4;border-top-style: solid">
-                            <div class="flex justify-content-between mb-3">
-                                <div>
-                                    <span class="block text-500 font-medium mb-3">Candidatos Aprobados</span>
-                                    <div class="text-900 font-medium text-3xl">2</div>
-                                </div>
-                                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-                                     style="width:2.5rem;height:2.5rem">
-                                    <i class="pi pi-check text-cyan-500 text-xl"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </p:card>
-        </h:form>
-
-        <h:form id="form1">
-            <p:card style="width:auto" rendered="#{mesaContratosBean.permisoVista.get('seleccionCandidato')}">
-
-                <div class="grid">
-                    <div class="col-12 lg:col-12">
-                        <div class="p-0 h-full">
-                            <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px
-                                 ;border-top-style: solid;border-top-color:#006ba1">
-                                <div class="text-900 font-medium text-xl mb-2">Panel del Candidato</div>
-                                <div class="card">
-                                    <p:panelGrid columns="1"
-                                                 layout="grid"
-                                                 styleClass="showcase-text-align-center"
-                                                 rendered="true"
-                                                 id="panel">
-                                        <p:steps activeIndex="#{mesaContratosBean.permisoVista.get('estadoFlujo')}" class="ui-steps-number">
-                                            <p:menuitem value="Seleccion"/>
-                                            <p:menuitem value="Visualizacion"/>
-                                            <p:menuitem value="Aprobacion"/>
-                                        </p:steps>
-                                    </p:panelGrid>
-                                </div>
-                                <div class="col-12 lg:col-12">
-                                    <div class="card">
-                                        <div class="grid ui-fluid">
-
-                                            <div class="col-12 md:col-3">
-                                                <div class="shadow-2 p-3 h-full flex flex-column surface-card"
-                                                     style="border-radius: 6px
-                                                     ;border-top-style: solid;border-top-color:#006ba1">
-                                                    <p:outputLabel for="" value="Seleccione un candidato"
-                                                                   style="font-family: Activos"/>
-                                                    <br></br>
-                                                    <div class="grid ui-fluid">
-                                                        <div class="field col-12 md:col-4">
-                                                            <div class="ui-inputgroup">
-                                                                <p:outputLabel for="@next" value="Estado  : "
-                                                                               style="font-family: Activos"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="field col-12 md:col-4">
-                                                            <div class="ui-inputgroup">
-                                                                <p:outputLabel for="" value="#{mesaContratosBean.estadoCedulas}" class="text-xl "
-                                                                               style="font-family:Activos;border-bottom-style: solid;border-bottom-color:#ce353a"/>
-                                                            </div>
-                                                        </div>
-                                                        <p:autoUpdate/>
-                                                        <p:selectOneMenu value="#{mesaContratosBean.cedulaPeritaje}" 
-                                                                         converter="entityConverter"    
-                                                                         id="selectCedulaPeritaje"
-                                                                         required="true" 
-                                                                         requiredMessage="Debe seleccionar un documento para continuar"  
-                                                                         filter="true" 
-                                                                         filterMatchMode="contains"
-                                                                         >
-                                                            <f:selectItem itemLabel="Seleccione una cedula" itemValue="#{null}"/>
-                                                            <f:selectItems value="#{mesaContratosBean.cedulasPeritaje}" 
-                                                                           var="cedula"
-                                                                           itemLabel="#{cedula.tdc_td_epl} - #{cedula.epl_nd}" 
-                                                                           itemValue="#{cedula}"/>
-                                                            <p:ajax event="change" 
-                                                                    listener="#{mesaContratosBean.informacionPeritaje()}"
-                                                                    update="label informacionPeritaje"
-                                                                    onstart="PrimeFaces.monitorDownload(start);"
-                                                                    oncomplete="PrimeFaces.monitorDownload(stop);"
-                                                                    />
-
-                                                            <f:facet name="footer">
-                                                                <p:divider styleClass="mt-0"/>
-                                                                <h:outputText value="#{mesaContratosBean.cedulasPeritaje.size()}" style="font-weight:bold;"/>
-                                                            </f:facet>
-
-
-                                                        </p:selectOneMenu>
-                                                        <div class="field col-12 md:col-12">
-                                                            <div class="ui-inputgroup">
-                                                                <p:outputLabel
-                                                                    id="label"
-                                                                    value="#{mesaContratosBean.cedulaPeritaje.lib_consecutivo}"
-                                                                    class="text-red-500-"
-                                                                    style="font-family:Activos;color:red"/>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="field col-12 md:col-9">
-
-                                                <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px
-                                                     ;border-top-style: solid;border-top-color:#f2a325">
-                                                    <p:panel id="informacionPeritaje">
-                                                        <p:outputLabel for="@next" value="Informacion de la Empresa"
-                                                                       style="font-family: Activos"/>
-                                                        <div class="grid ui-fluid">
-                                                            <div class="col-12 md:col-4">
-                                                                <h5>Nit :</h5>
-                                                                <div class="ui-inputgroup">
-                                                                    <div class="ui-inputgroup-addon"><i
-                                                                            class="pi pi-id-card"></i></div>
-                                                                    <p:inputText placeholder="Nit" 
-                                                                                 readonly="true"
-                                                                                 value="#{mesaContratosBean.informacionAsociada.emp_nd}"
-                                                                                 />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 md:col-4">
-                                                                <h5>Nombre de la empresa :</h5>
-                                                                <div class="ui-inputgroup">
-                                                                    <div class="ui-inputgroup-addon"><i
-                                                                            class="pi pi-building"></i></div>
-                                                                    <p:inputText placeholder="Nombre de la empresa"
-                                                                                 readonly="true"
-                                                                                 value="#{mesaContratosBean.informacionAsociada.emp_nom}"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 md:col-4">
-                                                                <h5>#Libro consecutivo :</h5>
-                                                                <div class="ui-inputgroup">
-                                                                    <div class="ui-inputgroup-addon"><i
-                                                                            class="pi pi-hashtag"></i></div>
-                                                                    <p:inputText placeholder="Libro consecutivo"
-                                                                                 readonly="true"
-                                                                                 value="#{mesaContratosBean.informacionAsociada.lib_consecutivo}"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
-                                                        <p:outputLabel for="@next" value="Informacion del candidato"
-                                                                       style="font-family: Activos"/>
-                                                        <div class="grid ui-fluid">
-                                                            <div class="col-12 md:col-5">
-                                                                <h5>Nombre del candidato :</h5>
-                                                                <div class="ui-inputgroup">
-                                                                    <div class="ui-inputgroup-addon"><i class="pi pi-user"></i>
-                                                                    </div>
-                                                                    <p:inputText placeholder="Nombre del candidato"
-                                                                                 readonly="true"
-                                                                                 value="#{mesaContratosBean.informacionAsociada.nombre_empleado}"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 md:col-5">
-                                                                <h5>Cargo al que se postula :</h5>
-                                                                <div class="ui-inputgroup">
-                                                                    <div class="ui-inputgroup-addon"><i
-                                                                            class="pi pi-briefcase"></i></div>
-                                                                    <p:inputText placeholder="Cargo"
-                                                                                 readonly="true"
-                                                                                 value="#{mesaContratosBean.informacionAsociada.cargo_empleado}"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </p:panel>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-offset-5">
-                                            <p:commandButton value="Aceptar"
-                                                             actionListener="#{mesaContratosBean.seleccionCandidato('Seleccionar')}"
-                                                             update="form form1:panel message form3:visualizacionCan form3 
-                                                             form1 tablaResponsables tblsucursalEmpresa tblcontactoSucursal"
-                                                             styleClass="mr-2"
-                                                             icon="pi pi-check"
-                                                             onstart="PrimeFaces.monitorDownload(start);"
-                                                             oncomplete="PrimeFaces.monitorDownload(stop);"
-                                                             >
-                                                <!--                                                                     onstart="PrimeFaces.monitorDownload(start);"
-                                                                                                                     oncomplete="PrimeFaces.monitorDownload(stop);">-->
-                                                <p:confirm header="Confirmación"
-                                                           message="Señor usuario una vez seleccionado el candidat@
-                                                           no podrá realizar otro proceso de validacion hasta no culminar
-                                                           el proceso."
-                                                           icon="pi pi-exclamation-triangle"/>
-                                            </p:commandButton>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
-                </p:confirmDialog>
-            </p:card>
-        </h:form>
-        <h:form id="vistaEstadoVisualizacion">
-            <p:card style="width:auto" rendered="#{mesaContratosBean.permisoVista.get('EstadoVisualizacion')}">
-                <div class="grid">
-                    <div class="col-12 lg:col-12">
-                        <div class="p-0">
-                            <div class="shadow-2 p-1  flex flex-column surface-card" style="border-radius: 6px
-                                 ;border-top-style: solid;border-top-color:#006ba1; width: auto "  >
-                                <div class="card">
-                                    <p:panelGrid columns="1"
-                                                 layout="grid"
-                                                 styleClass="showcase-text-align-center"
-                                                 rendered="true"
-                                                 id="panel">
-                                        <p:steps activeIndex="#{mesaContratosBean.permisoVista.get('estadoFlujo')}" class="ui-steps-number">
-                                            <p:menuitem value="Seleccion"/>
-                                            <p:menuitem value="Visualizacion"/>
-                                            <p:menuitem value="Aprobacion"/>
-                                        </p:steps>
-                                    </p:panelGrid>
-                                </div>
-                                <div class="col-12 lg:col-12">
-                                    <div class="card">
-                                        <div class="grid ui-fluid">
-                                            <div class="col-12 md:col-4">
-                                                <div class="shadow-2 p-3  flex flex-column surface-card"
-                                                     style="border-radius: 6px
-                                                     ;border-top-style: solid;border-top-color:#006ba1">
-                                                    <p:outputLabel for="" value="En proceso de Visualización"
-                                                                   style="font-family: Activos ; font-size:1.5rem"/>
-                                                    <br></br>
-                                                    <div class="grid ui-fluid">
-                                                        <div class="field col-12 md:col-6">
-                                                            <div class="ui-inputgroup">
-                                                                <p:outputLabel for="@next" value="Estado  : "
-                                                                               style="font-family: Activos"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="field col-12 md:col-6">
-                                                            <div class="ui-inputgroup">
-                                                                <p:outputLabel for="" value="#{mesaContratosBean.estadoCedulas}" class="text-xl "
-                                                                               style="font-family:Activos;border-bottom-style: solid;border-bottom-color:#ce353a"/>
-                                                            </div>                                                           
-                                                        </div>
-                                                        <div class="field col-12 md:col-3">
-                                                            <div class="ui-inputgroup">
-                                                                <p:outputLabel for="@next" value="Cedula : "
-                                                                               style="font-family: Activos"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="field col-12 md:col-9">
-                                                            <div class="ui-inputgroup">
-                                                                <p:outputLabel for="" 
-                                                                               value="#{mesaContratosBean.informacionAsociada.tdc_td_epl}-#{mesaContratosBean.informacionAsociada.epl_nd}"
-                                                                               class="text-xl "
-                                                                               style="font-family:Activos;border-bottom-style: solid;border-bottom-color:#ce353a"/>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="field col-12 md:col-8">
-                                                <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px
-                                                     ;border-top-style: solid;border-top-color:#f2a325">
-                                                    <p:panel id="informacionPeritaje">
-                                                        <p:outputLabel for="@next" value="Informacion de la Empresa"
-                                                                       style="font-family: Activos"/>
-                                                        <div class="grid ui-fluid">
-                                                            <div class="col-12 md:col-4">
-                                                                <h5>Nit :</h5>
-                                                                <div class="ui-inputgroup">
-                                                                    <div class="ui-inputgroup-addon"><i
-                                                                            class="pi pi-id-card"></i></div>
-                                                                    <p:inputText placeholder="Nit" 
-                                                                                 readonly="true"
-                                                                                 value="#{mesaContratosBean.informacionAsociada.emp_nd}"
-                                                                                 />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 md:col-4">
-                                                                <h5>Nombre de la empresa :</h5>
-                                                                <div class="ui-inputgroup">
-                                                                    <div class="ui-inputgroup-addon"><i
-                                                                            class="pi pi-building"></i></div>
-                                                                    <p:inputText placeholder="Nombre de la empresa"
-                                                                                 readonly="true"
-                                                                                 value="#{mesaContratosBean.informacionAsociada.emp_nom}"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 md:col-4">
-                                                                <h5>#Libro consecutivo :</h5>
-                                                                <div class="ui-inputgroup">
-                                                                    <div class="ui-inputgroup-addon"><i
-                                                                            class="pi pi-hashtag"></i></div>
-                                                                    <p:inputText placeholder="Libro consecutivo"
-                                                                                 readonly="true"
-                                                                                 value="#{mesaContratosBean.informacionAsociada.lib_consecutivo}"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
-                                                        <p:outputLabel for="@next" value="Informacion del candidato"
-                                                                       style="font-family: Activos"/>
-                                                        <div class="grid ui-fluid">
-                                                            <div class="col-12 md:col-5">
-                                                                <h5>Nombre del candidato :</h5>
-                                                                <div class="ui-inputgroup">
-                                                                    <div class="ui-inputgroup-addon"><i class="pi pi-user"></i>
-                                                                    </div>
-                                                                    <p:inputText placeholder="Nombre del candidato"
-                                                                                 readonly="true"
-                                                                                 value="#{mesaContratosBean.informacionAsociada.nombre_empleado}"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 md:col-5">
-                                                                <h5>Cargo al que se postula :</h5>
-                                                                <div class="ui-inputgroup">
-                                                                    <div class="ui-inputgroup-addon"><i
-                                                                            class="pi pi-briefcase"></i></div>
-                                                                    <p:inputText placeholder="Cargo"
-                                                                                 readonly="true"
-                                                                                 value="#{mesaContratosBean.informacionAsociada.cargo_empleado}"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </p:panel>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-offset-5">
-                                            <p:commandButton value="Continuar"
-                                                             actionListener="#{mesaContratosBean.seleccionCandidato('Visualizar')}"
-                                                             update="form form1:panel message form3:visualizacionCan form3 form1 vistaEstadoVisualizacion"
-                                                             styleClass="mr-2"
-                                                             icon="pi pi-check"
-                                                             onstart="PrimeFaces.monitorDownload(start);"
-                                                             oncomplete="PrimeFaces.monitorDownload(stop);"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </p:card>
-        </h:form>
         <h:form id="form3">
-            <p:card style="width:auto" rendered="#{mesaContratosBean.permisoVista.get('visualizacionDocumentos')}">
+            <p:card style="width:auto" >
                 <div class="grid">
                     <div class="col-12 lg:col-12">
                         <div class="p-0 h-full">
@@ -425,7 +26,7 @@ and open the template in the editor.
                                                  styleClass="showcase-text-align-center"
                                                  rendered="true"
                                                  id="visualizacionCan">
-                                        <p:steps activeIndex="#{mesaContratosBean.permisoVista.get('estadoFlujo')}" class="ui-steps-number">
+                                        <p:steps activeIndex="2" class="ui-steps-number">
                                             <p:menuitem value="Seleccion"/>
                                             <p:menuitem value="Visualizacion"/>
                                             <p:menuitem value="Aprobacion"/>
@@ -441,9 +42,9 @@ and open the template in the editor.
                                                 <p:inputText 
                                                     readonly="true"
                                                     id="empresa"
-                                                    value="#{mesaContratosBean.informacionAsociada.tdc_td}- #{mesaContratosBean.informacionAsociada.emp_nd}- #{mesaContratosBean.informacionAsociada.emp_nom}"
+                                                    value="#{acuerdoEmpresaBean.informacionAsociada.tdc_td}- #{acuerdoEmpresaBean.informacionAsociada.emp_nd}- #{acuerdoEmpresaBean.informacionAsociada.emp_nom}"
                                                     />
-                                                <p:tooltip for="empresa"  showEffect="clip" hideEffect="fold" value="#{mesaContratosBean.informacionAsociada.tdc_td}- #{mesaContratosBean.informacionAsociada.emp_nd}- #{mesaContratosBean.informacionAsociada.emp_nom}" position="bottom"/>
+                                                <p:tooltip for="empresa"  showEffect="clip" hideEffect="fold" value="#{acuerdoEmpresaBean.informacionAsociada.tdc_td}- #{acuerdoEmpresaBean.informacionAsociada.emp_nd}- #{acuerdoEmpresaBean.informacionAsociada.emp_nom}" position="bottom"/>
                                             </div>
                                         </div>
                                         <div class="col-4">
@@ -452,11 +53,10 @@ and open the template in the editor.
                                                 <div class="ui-inputgroup-addon"><i class="pi pi-user"></i></div>
                                                 <p:inputText 
                                                     readonly="true"
-                                                    value="#{mesaContratosBean.informacionAsociada.nombre_empleado}"
+                                                    value="#{acuerdoEmpresaBean.informacionAsociada.nombre_empleado}"
                                                     id="nombreEmpleado"
-
                                                     />
-                                                <p:tooltip for="nombreEmpleado" value="#{mesaContratosBean.informacionAsociada.nombre_empleado}" position="bottom" showEffect="clip" hideEffect="fold"/>
+                                                <p:tooltip for="nombreEmpleado" value="#{acuerdoEmpresaBean.informacionAsociada.nombre_empleado}" position="bottom" showEffect="clip" hideEffect="fold"/>
                                             </div>
                                         </div>
                                         <div class="col-4">
@@ -466,152 +66,157 @@ and open the template in the editor.
                                                 <p:inputText 
                                                     readonly="true"
                                                     id="cargoEmpleado"
-                                                    value="#{mesaContratosBean.informacionAsociada.cargo_empleado}"/>
-                                                <p:tooltip for="cargoEmpleado" value="#{mesaContratosBean.informacionAsociada.cargo_empleado}" position="bottom" showEffect="clip" hideEffect="fold"/>
+                                                    value="#{acuerdoEmpresaBean.informacionAsociada.cargo_empleado}"/>
+                                                <p:tooltip for="cargoEmpleado" value="#{acuerdoEmpresaBean.informacionAsociada.cargo_empleado}" position="bottom" showEffect="clip" hideEffect="fold"/>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
-
                                 <div class="col-12 lg:col-12">
                                     <div class="card">
                                         <div class="grid ui-fluid">
                                             <div class="field col-12 md:col-12">
                                                 <div class="shadow-2 p-2 flex flex-column surface-card" style="border-radius: 6px
                                                      ;border-top-style: solid;border-top-color:#f2a325 ; height: auto ; width: auto">
-                                                    <p:tabView dynamic="true">
-
-                                                        <p:tab title="Visualizador de Documentos"
-                                                               >
-
+                                                    <p:tabView dynamic="true" cache="true" >
+                                                        <!--                                                        <p:ajax event="tabChange" 
+                                                                                                                        async="true"  
+                                                                                                                        listener="#{acuerdoEmpresaBean.cargarAcuerdoEmpresa()}"/>-->
+                                                        <p:tab title="Visualizador de Documentos"  >
                                                             <div class="grid">
-                                                                <h:panelGroup rendered="#{not empty mesaContratosBean.documentos}" id="contenedorPrincipal">
+                                                                <h:panelGroup rendered="#{not empty checkBean.documentos}" id="contenedorPrincipal">
                                                                     <div class="ui-g-5">
                                                                         <div class="p-2">
-                                                                            <p:dataTable value="#{mesaContratosBean.documentos}" 
-                                                                                         emptyMessage="Sin resultados"
-                                                                                         selectionMode="single" 
+                                                                            <p:treeTable value="#{checkBean.documentos}"
+                                                                                         emptyMessage="Sin resultados" 
+                                                                                         size="small"
+                                                                                         selectionMode="single"
                                                                                          rows="10" 
                                                                                          paginator="true" 
                                                                                          paginatorPosition="bottom"
-                                                                                         selection="#{mesaContratosBean.documentoSelect}" 
-                                                                                         var="doc" 
-                                                                                         rowKey="#{doc.id}"
-                                                                                         styleClass="shadow-lg" 
-                                                                                         size="small"
-                                                                                         filterBy="#{doc.nombreDocumento}">
-                                                                                <p:ajax event="rowSelect" 
-                                                                                        listener="#{mesaContratosBean.getFullDocumentUrl()}"
-                                                                                        update="form3:j_idt96:contenedorPrincipal"
-                                                                                        onstart="PrimeFaces.monitorDownload(start);"
-                                                                                        oncomplete="PrimeFaces.monitorDownload(stop);"/>
-                                                                                <p:column headerText="Documento" filterBy="#{doc.nombreDocumento}">
-                                                                                    <h:outputText value="#{doc.nombreDocumento}"/>
+                                                                                         selection="#{checkBean.documentoSelect}" 
+                                                                                         var="doc" >
+                                                                                <p:ajax event="select" 
+                                                                                        update="form3:j_idt23:contenedorPrincipal" 
+                                                                                        listener="#{checkBean.getFullDocumentUrl}"/>
+                                                                                <p:column headerText="Documento">
+                                                                                    <h:outputText value="#{doc.nombreDocumento}" id="documento"/>
+                                                                                </p:column>
+
+                                                                                <p:column headerText="Check" width="45">
+                                                                                    <p:triStateCheckbox id="ajaxTriState" value="#{doc.ldoTemporalEstado}">
+                                                                                        <p:ajax event="change" update="form3:j_idt23:contenedorPrincipal message"
+                                                                                                listener="#{checkBean.actualizarEstadoDocumento(doc)}"
+                                                                                                />
+                                                                                    </p:triStateCheckbox>
                                                                                 </p:column>
                                                                                 <p:column headerText="Estado" width="110">
                                                                                     <h:outputText value="#{doc.dataErpAz.azdCodigoCli eq null?'Pendiente':'Cargado'}"
                                                                                                   styleClass="status-#{doc.dataErpAz.azdCodigoCli eq null?'warning':'success'}"/>
                                                                                 </p:column>
-                                                                                <p:column headerText="Check" width="60">
-                                                                                    <p:triStateCheckbox id="ajaxTriState" value="#{doc.ldoTemporalEstado}">
-                                                                                        <p:ajax event="change" update="@form"
-                                                                                                listener="#{mesaContratosBean.actualizarEstadoDocumento(doc)}"/>
-                                                                                    </p:triStateCheckbox>
-                                                                                </p:column>
-                                                                            </p:dataTable>
+                                                                            </p:treeTable>
+                                                                            <div class="col-12">
+                                                                                <h:panelGroup style="display:block; text-align:center">
+                                                                                    <p:commandButton id="finalizarProceso"
+                                                                                                     value="Guardar"
+                                                                                                     styleClass="ui-button-warning"
+                                                                                                     type="button"
+                                                                                                     onclick="PF('cambioEstado').show()"
+                                                                                                     icon="pi pi-save"
+                                                                                                     update="message"
+                                                                                                     />
+                                                                                </h:panelGroup>
+                                                                            </div>  
                                                                         </div>
                                                                     </div>
-                                                                    <div class="ui-g-7">
+                                                                    <div class="ui-g-7" >
                                                                         <div class="p-2">
-                                                                            <h:panelGroup id="pdf_content" 
-                                                                                          rendered="#{!(mesaContratosBean.documentoSelect eq null) 
-                                                                                                      and !(mesaContratosBean.documentoSelect.dataErpAz.azdCodigoCli eq null)}">
-                                                                                <div class="card">
-                                                                                    <div class="flex items-center justify-center"
-                                                                                         style=" height: 800px">
-                                                                                        <iframe id="documentViewer"
-                                                                                                src="#{mesaContratosBean.documentUrl}" 
-                                                                                                class="w-full h-full"></iframe>
-                                                                                    </div>
+                                                                            <h:panelGroup rendered="#{checkBean.documentoSelect eq null
+                                                                                                      or checkBean.documentoSelect.data.dataErpAz.azdCodigoCli eq null}">
+                                                                                <div class="flex items-center justify-center"
+                                                                                     style=" height: 800px">
+                                                                                    <span class="font-semibold status-error">Archivo no disponible</span>
                                                                                 </div>
                                                                             </h:panelGroup>
-
+                                                                            <h:panelGroup
+                                                                                rendered="#{!(checkBean.documentoSelect eq null) and !(checkBean.documentoSelect.data.dataErpAz.azdCodigoCli eq null)}">
+                                                                                <div class="flex items-center justify-center"
+                                                                                     style=" height: 800px">
+                                                                                    <iframe id="documentViewer"
+                                                                                            src="#{checkBean.documentUrl}" 
+                                                                                            class="w-full h-full"></iframe>
+                                                                                </div>
+                                                                            </h:panelGroup>
                                                                         </div>
                                                                     </div>
                                                                 </h:panelGroup>
                                                             </div>
-
                                                         </p:tab>
                                                         <p:tab title="Información del Cliente">
-                                                            <div class="p-0 h-full">
 
+                                                            <div class="p-0 h-full">
                                                                 <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px
                                                                      ;border-top-style: solid;border-top-color:#006ba1">
-
-
                                                                     <p:divider align="center" >
                                                                         <i class="pi pi-building mr-2"/>
                                                                         <b>  <p:outputLabel value="Información General"
                                                                                             style="font-family: Activos"/></b>
                                                                     </p:divider>
-                                                                    <p:outputLabel value="Tipo de operación : #{mesaContratosBean.empresa.EMP_TIPO_OPERACION}"
+                                                                    <p:outputLabel value="Tipo de operación : #{acuerdoEmpresaBean.empresa.EMP_TIPO_OPERACION}"
                                                                                    style="font-family: Activos ; font-weight: bold"/>
-
                                                                     <div class="formgrid grid  p-3">                                                                      
                                                                         <div class="field col-1">
                                                                             <label class="labelAcuerdo">Tipo</label>
                                                                             <br></br>
-                                                                            <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.TDC_TD_FIL}">                                                                        
+                                                                            <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.TDC_TD_FIL}">                                                                        
                                                                             </input>
                                                                         </div>
                                                                         <div class="field col-2">
                                                                             <label class="labelAcuerdo">Documento</label>
                                                                             <br></br>
-                                                                            <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.EMP_ND_FIL}">                                                                        
+                                                                            <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_ND_FIL}">                                                                        
                                                                             </input>
                                                                         </div>
                                                                         <div class="field col-1">
                                                                             <label class="labelAcuerdo">DV</label>
                                                                             <br></br>
-                                                                            <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.EMP_DV}">                                                                        
+                                                                            <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_DV}">                                                                        
                                                                             </input>
                                                                         </div>
                                                                         <div class="field col-4">
                                                                             <label class="labelAcuerdo">Razón Social</label>
                                                                             <br></br>
-                                                                            <input class="ui-inputfield"  readonly="true" value="#{mesaContratosBean.empresa.EMP_RAZON_SOCIAL}">                                                                        
+                                                                            <input class="ui-inputfield"  readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_RAZON_SOCIAL}">                                                                        
                                                                             </input>
                                                                         </div>
                                                                         <div class="field col-4">
                                                                             <label class="labelAcuerdo">Ciudad</label>
                                                                             <br></br>
-                                                                            <input class="ui-inputfield"  readonly="true" value="#{mesaContratosBean.empresa.EMP_CIUDAD}">                                                                        
+                                                                            <input class="ui-inputfield"  readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_CIUDAD}">                                                                        
                                                                             </input>
                                                                         </div>
                                                                         <div class="field col-2 ">
                                                                             <label class="labelAcuerdo">Codigo Cliente</label>
                                                                             <br></br>
-                                                                            <input class="ui-inputfield"  readonly="true" value="#{mesaContratosBean.empresa.EMP_ACU_CODIGO}">                                                                        
+                                                                            <input class="ui-inputfield"  readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_ACU_CODIGO}">                                                                        
                                                                             </input>
                                                                         </div>
                                                                         <div class="field col-3">
                                                                             <label class="labelAcuerdo">Teléfonos</label>
-                                                                            <input class="ui-inputfield"  readonly="true" value="#{mesaContratosBean.empresa.EMP_TELEFONOS} - #{mesaContratosBean.empresa.EMP_CELULAR}">                                                                        
+                                                                            <input class="ui-inputfield"  readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_TELEFONOS} - #{mesaContratosBean.empresa.EMP_CELULAR}">                                                                        
                                                                             </input>
 
                                                                         </div>
-
                                                                         <div class="field col-7">
                                                                             <label class="labelAcuerdo">Actividad Económica </label>
                                                                             <br></br>
-                                                                            <input class="ui-inputfield" readonly="true"  value="#{mesaContratosBean.empresa.EMP_ACTIVIDAD_ECONOMICA}">                                                                        
+                                                                            <input class="ui-inputfield" readonly="true"  value="#{acuerdoEmpresaBean.empresa.EMP_ACTIVIDAD_ECONOMICA}">                                                                        
                                                                             </input>
                                                                         </div>
                                                                         <div class="field col-6">
                                                                             <label class="labelAcuerdo">Dirección</label>
                                                                             <br></br>
-                                                                            <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.EMP_DIRECCION_PRINCIPAL}">                                                                        
+                                                                            <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_DIRECCION_PRINCIPAL}">                                                                        
                                                                             </input>
                                                                         </div>
                                                                         <div class="field col-1 ">
@@ -625,7 +230,7 @@ and open the template in the editor.
                                                                             <p:overlayPanel for="priEmpresa" dynamic="true" style="width:300px">
                                                                                 <p:dataTable var="principal" 
                                                                                              rows="5" 
-                                                                                             value="#{mesaContratosBean.empresaPrincipals}" 
+                                                                                             value="#{acuerdoEmpresaBean.empresaPrincipals}" 
 
                                                                                              >
                                                                                     <p:column headerText="Principal">
@@ -638,10 +243,9 @@ and open the template in the editor.
                                                                         <div class="field col-5">
                                                                             <label class="labelAcuerdo">Email</label>
                                                                             <br></br>
-                                                                            <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.EMP_EMAIL}">                                                                        
+                                                                            <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_EMAIL}">                                                                        
                                                                             </input>
                                                                         </div>
-
                                                                     </div>
                                                                     <p:divider style="border-top: 2px solid ; border-color:#f2a325 " align="center" ></p:divider>
                                                                     <div class="col-12">
@@ -655,11 +259,11 @@ and open the template in the editor.
                                                                                         <div class="grid">
                                                                                             <div class="col-3">
                                                                                                 <input class="ui-inputfield" readonly="true" 
-                                                                                                       value="#{mesaContratosBean.empresa.EMP_AGRUPA_EMPRESARIAL}">     
+                                                                                                       value="#{acuerdoEmpresaBean.empresa.EMP_AGRUPA_EMPRESARIAL}">     
                                                                                                 </input>
                                                                                             </div>  
                                                                                             <div class="col-9">
-                                                                                                <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.EMP_RAZON_SOCIAL}">     
+                                                                                                <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_RAZON_SOCIAL}">     
                                                                                                 </input> 
                                                                                             </div>  
                                                                                         </div>
@@ -668,7 +272,7 @@ and open the template in the editor.
                                                                                         <label class="labelAcuerdo">Actividad Económica</label> 
                                                                                     </div>
                                                                                     <div class="col-7" >
-                                                                                        <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.EMP_ACTIVIDAD_ECONOMICA}">     
+                                                                                        <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_ACTIVIDAD_ECONOMICA}">     
                                                                                         </input>
                                                                                     </div>
                                                                                     <div class="col-4">
@@ -677,11 +281,11 @@ and open the template in the editor.
                                                                                     <div class="col-7" >
                                                                                         <div class="grid">
                                                                                             <div class="col-4" >
-                                                                                                <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.EMP_DOC_REPRESENTANTE_LEGAL}"> 
+                                                                                                <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_DOC_REPRESENTANTE_LEGAL}"> 
                                                                                                 </input>
                                                                                             </div>
                                                                                             <div class="col-8" >
-                                                                                                <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.EMP_REPRESENTANTE_LEGAL}">   
+                                                                                                <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_REPRESENTANTE_LEGAL}">   
                                                                                                 </input>
                                                                                             </div>
                                                                                         </div>
@@ -690,28 +294,28 @@ and open the template in the editor.
                                                                                         <label class="labelAcuerdo">Auditor RRHH:</label> 
                                                                                     </div>
                                                                                     <div class="col-7" >
-                                                                                        <input class="ui-inputfield" readonly="readonly" value="#{mesaContratosBean.empresa.EMP_AUTORIDAD_RRHH}">
+                                                                                        <input class="ui-inputfield" readonly="readonly" value="#{acuerdoEmpresaBean.empresa.EMP_AUTORIDAD_RRHH}">
                                                                                         </input>
                                                                                     </div>
                                                                                     <div class="col-4">
                                                                                         <label class="labelAcuerdo">Medio de Consulta:</label> 
                                                                                     </div>
                                                                                     <div class="col-3" >
-                                                                                        <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.EMP_MEDIO_CONSULTA}">     
+                                                                                        <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_MEDIO_CONSULTA}">     
                                                                                         </input>
                                                                                     </div>
                                                                                     <div class="col-2">
                                                                                         <label class="labelAcuerdo">Cod CIIU :</label> 
                                                                                     </div>
                                                                                     <div class="col-2" >
-                                                                                        <input class="ui-inputfield" readonly="true" value="#{mesaContratosBean.empresa.EMP_CODIGO_CIU}">     
+                                                                                        <input class="ui-inputfield" readonly="true" value="#{acuerdoEmpresaBean.empresa.EMP_CODIGO_CIU}">     
                                                                                         </input>
                                                                                     </div>
                                                                                     <div class="col-4">
                                                                                         <label class="labelAcuerdo">N. Matricula:</label> 
                                                                                     </div>
                                                                                     <div class="col-7" >
-                                                                                        <input class="ui-inputfield" readonly="true"  value="#{mesaContratosBean.empresa.NUM_MATRICULA_MERCANTIL}">     
+                                                                                        <input class="ui-inputfield" readonly="true"  value="#{acuerdoEmpresaBean.empresa.NUM_MATRICULA_MERCANTIL}">     
                                                                                         </input>
                                                                                     </div>
                                                                                 </div>
@@ -723,7 +327,6 @@ and open the template in the editor.
                                                                                                         style="font-family: Activos"/></b>
                                                                                 </p:divider>
                                                                                 <div class="col-12">
-
                                                                                     <p:commandButton value="RIC" 
                                                                                                      type="button" 
                                                                                                      id="responsable" 
@@ -752,22 +355,14 @@ and open the template in the editor.
                                                                                                      onclick="PF('contactoSucursal').show()"/>
                                                                                     <p:tooltip for="contacto" value="Contacto Sucursal" showEffect="clip" hideEffect="fold" />
                                                                                 </div>
-
-
-
                                                                             </div>
                                                                         </div> 
                                                                     </div>
-
                                                                 </div>
                                                             </div>
                                                         </p:tab>
-
                                                         <p:tab title="Agrupaciones ">
-
                                                             <div class="grid" >
-
-
                                                                 <div class="col-12 md:col-6 lg:col-12">
                                                                     <div class="shadow-2 p-2 flex flex-column surface-card" style="border-radius: 6px
                                                                          ;border-top-style: solid;border-top-color:#ce353a ; height: auto ; width: auto">
@@ -785,7 +380,6 @@ and open the template in the editor.
                                                                                                  style="background-color:#ffffff; border:2px solid #ce353a ; color: #020202" 
                                                                                                  onclick="PF('responsableEmpresa').show()"/>
                                                                                 <p:tooltip for="responsableAgrupacion" value="Clic para ver los responsables" showEffect="clip" hideEffect="fold"  position="bottom"/> 
-
                                                                             </div>
                                                                             <div class="col-12 md:col-4 lg:col-4">
                                                                                 <p:commandButton value="Observaciones Generales" 
@@ -795,9 +389,6 @@ and open the template in the editor.
                                                                                                  style="background-color:#ffffff; border:2px solid #2196F3 ; color: #020202" 
                                                                                                  onclick="PF('observacionesGenerales').show()"/>
                                                                                 <p:tooltip for="observacionesGenerales" value="Clic para ver las observaciones Generales" showEffect="clip" hideEffect="fold"  position="bottom"/> 
-
-
-
                                                                             </div>
                                                                             <div class="col-12 md:col-4 lg:col-4">
                                                                                 <p:commandButton value="Contacto Responsable" 
@@ -807,11 +398,8 @@ and open the template in the editor.
                                                                                                  style="background-color:#ffffff; border:2px solid #fbc02d ; color: #020202" 
                                                                                                  onclick="PF('contactoResponsable').show()"/>
                                                                                 <p:tooltip for="contactoResponsable" value="Clic para ver el contacto responsable" showEffect="clip" hideEffect="fold"  position="bottom"/> 
-
-
                                                                             </div>
                                                                         </div>
-
                                                                         <p:divider align="center" >
                                                                             <i class="pi pi-folder mr-2"/>
                                                                             <b>  <p:outputLabel value="Acuerdos"
@@ -820,41 +408,38 @@ and open the template in the editor.
                                                                         <div class="grid">
                                                                             <div class="col-12 md:col-1 lg:col-1">
                                                                                 <p:inputText 
-                                                                                    value="#{mesaContratosBean.agrupacion.AGA_CODIGO}" 
+                                                                                    value="#{acuerdoEmpresaBean.agrupacion.AGA_CODIGO}" 
                                                                                     id="label"
                                                                                     readonly="true"
                                                                                     />
-
                                                                             </div>
                                                                             <div class="col-12 md:col-6 lg:col-8">
-                                                                                <p:selectOneMenu value="#{mesaContratosBean.agrupacion}" 
+                                                                                <p:selectOneMenu value="#{acuerdoEmpresaBean.agrupacion}" 
                                                                                                  converter="entityConverter"    
                                                                                                  id="selectAgrupacionEmpresa"
-
                                                                                                  filter="true" 
                                                                                                  filterMatchMode="contains"
                                                                                                  >
-                                                                                    <f:selectItem itemLabel="Seleccione una agrupación" itemValue="#{null}"/>
-                                                                                    <f:selectItems value="#{mesaContratosBean.agrupacionEmpresas}" 
+                                                                                    <f:selectItem itemLabel="Seleccione una agrupación" itemValue="#{acuerdoEmpresaBean.agrupacion}" 
+                                                                                                  noSelectionOption="true"/>
+                                                                                    <f:selectItems value="#{acuerdoEmpresaBean.agrupacionEmpresas}" 
                                                                                                    var="agrupacion"
                                                                                                    itemLabel="#{agrupacion.AGA_DESCRIPCION}" 
                                                                                                    itemValue="#{agrupacion}"/>
-                                                                                    <p:ajax event="change" listener="#{mesaContratosBean.agrupacionSeleccionada()}"
-                                                                                            update="label tblAgrupacionSeleccionada tblatriAgrupac form3:j_idt96:observacionAgrupacion form3:j_idt96:observacionAtributo
-                                                                                            tblnotaEmpresa"
-
+                                                                                    <p:ajax event="change" listener="#{acuerdoEmpresaBean.agrupacionSeleccionada()}"
+                                                                                            update="form3:j_idt23:label 
+                                                                                            form3:j_idt23:tblAgrupacionSeleccionada
+                                                                                            form3:j_idt23:observacionAgrupacion
+                                                                                            form3:j_idt23:tblatriAgrupac 
+                                                                                            form3:j_idt23:observacionAtributo
+                                                                                            tblnotaEmpresa
+                                                                                            tblresponsabl"
                                                                                             />
-                                                                                    <!--                                                                                    label tblAgrupacionSeleccionada  tblatriAgrupac form3:j_idt96:observacionAgrupacion
-                                                                                                                                                                                form3:j_idt96:observacionAtributo tblnotaEmpresa-->
-
-
                                                                                     <f:facet name="footer">
                                                                                         <p:divider styleClass="mt-0"/>
-                                                                                        <h:outputText value="#{mesaContratosBean.agrupacionEmpresas.size()}" style="font-weight:bold;"/>
+                                                                                        <h:outputText value="#{acuerdoEmpresaBean.agrupacionEmpresas.size()}" style="font-weight:bold;"/>
                                                                                     </f:facet>
-
                                                                                 </p:selectOneMenu>
-
                                                                             </div>
                                                                             <div class="col-12 md:col-2 lg:col-2">
                                                                                 <p:commandButton value="NOTA" 
@@ -864,67 +449,54 @@ and open the template in the editor.
                                                                                                  style="background-color:#ce353a; border-color:#ce353a" 
                                                                                                  onclick="PF('notaEmpresa').show()"/>
                                                                                 <p:tooltip for="notaAgrupacion" value="Clic para ver Nota" showEffect="clip" hideEffect="fold"  position="bottom"/>
-
-
                                                                             </div>
-
                                                                             <div class="col-12 md:col-6 lg:col-6">
-
                                                                                 <p:divider align="center" >
                                                                                     <i class="pi pi-book mr-2"/>
                                                                                     <b>  <p:outputLabel value="Acuerdos por Agrupacion"
                                                                                                         style="font-family: Activos"/></b>
                                                                                 </p:divider>
-
                                                                                 <h5>Observacion :</h5>
-
                                                                                 <p:inputText 
-                                                                                    value="#{mesaContratosBean.acuerdoPorAgrupacion.ACC_OBSERVACION}" 
+                                                                                    value="#{acuerdoEmpresaBean.acuerdoPorAgrupacion.ACC_OBSERVACION}" 
                                                                                     id="observacionAgrupacion"
                                                                                     readonly="true"
                                                                                     />
                                                                                 <p:tooltip for="observacionAgrupacion" 
-                                                                                           value="#{mesaContratosBean.acuerdoPorAgrupacion.ACC_OBSERVACION}" 
+                                                                                           value="#{acuerdoEmpresaBean.acuerdoPorAgrupacion.ACC_OBSERVACION}" 
                                                                                            position="bottom"
                                                                                            showEffect="clip" 
                                                                                            hideEffect="fold"/>
-
                                                                                 <br></br>
                                                                                 <br></br>
                                                                                 <p:dataTable var="agrupa" 
-                                                                                             value="#{mesaContratosBean.acuerdoPorAgrupacions}"
+                                                                                             value="#{acuerdoEmpresaBean.acuerdoPorAgrupacions}"
                                                                                              draggableColumns="true"
                                                                                              id="tblAgrupacionSeleccionada"
                                                                                              reflow="true" 
-
                                                                                              scrollable="true"
                                                                                              scrollHeight="250"
                                                                                              selectionMode="single" 
-                                                                                             selection="#{mesaContratosBean.acuerdoPorAgrupacion}"
+                                                                                             selection="#{acuerdoEmpresaBean.acuerdoPorAgrupacion}"
                                                                                              rowKey="#{agrupa.ACC_CODIGO}"
                                                                                              >
                                                                                     <p:ajax event="rowSelect" 
-                                                                                            listener="#{mesaContratosBean.agrupacionAtributoSeleccionado(event)}"
-                                                                                            update="form3:j_idt96:tblatriAgrupac form3:j_idt96:observacionAgrupacion form3:j_idt96:observacionAtributo"/>
-
-
-
+                                                                                            listener="#{acuerdoEmpresaBean.agrupacionAtributoSeleccionado(event)}"
+                                                                                            update="
+                                                                                            form3:j_idt23:observacionAgrupacion 
+                                                                                            form3:j_idt23:tblatriAgrupac 
+                                                                                            form3:j_idt23:observacionAtributo"/>
                                                                                     <p:column headerText="Codigo">
                                                                                         <h:outputText value="#{agrupa.ACC_CODIGO}" />
                                                                                     </p:column>
-
                                                                                     <p:column headerText="Atributo">
                                                                                         <h:outputText value="#{agrupa.ATR_NOMBRE}" />
                                                                                     </p:column>
-
                                                                                     <p:column headerText="Tipo">
                                                                                         <h:outputText value="#{agrupa.ACC_TIPO_DETALLE}" />
                                                                                     </p:column>
-
-
+                                                                                    <p:scrollTop target="parent" threshold="100" styleClass="custom-scrolltop" icon="pi pi-arrow-up" />
                                                                                 </p:dataTable>
-
-
                                                                             </div>
                                                                             <div class="col-12 md:col-1 lg:col-1">
                                                                                 <p:divider layout="vertical">
@@ -938,77 +510,56 @@ and open the template in the editor.
                                                                                                         style="font-family: Activos"/></b>
                                                                                 </p:divider>
                                                                                 <h5>Valor Atributo :</h5>
-
                                                                                 <p:inputText 
-                                                                                    value="#{mesaContratosBean.acuerdoPorAgrupacion.ACC_VALOR_ATRIBUTO}" 
+                                                                                    value="#{acuerdoEmpresaBean.acuerdoPorAgrupacion.ACC_VALOR_ATRIBUTO}" 
                                                                                     id="observacionAtributo"
                                                                                     readonly="true"
                                                                                     />
                                                                                 <p:tooltip for="observacionAtributo" 
-                                                                                           value="#{mesaContratosBean.acuerdoPorAgrupacion.ACC_VALOR_ATRIBUTO}" 
+                                                                                           value="#{acuerdoEmpresaBean.acuerdoPorAgrupacion.ACC_VALOR_ATRIBUTO}" 
                                                                                            position="bottom"
                                                                                            showEffect="clip" 
                                                                                            hideEffect="fold"/>
                                                                                 <br></br>
                                                                                 <br></br>
                                                                                 <p:dataTable var="atriAgrupac" 
-                                                                                             value="#{mesaContratosBean.agrupacionAtributos}"
+                                                                                             value="#{acuerdoEmpresaBean.agrupacionAtributos}"
                                                                                              draggableColumns="true"
                                                                                              id="tblatriAgrupac"
                                                                                              reflow="true" 
                                                                                              rows="5" 
-
                                                                                              >
                                                                                     <p:column headerText="Codigo">
                                                                                         <h:outputText value="#{atriAgrupac.DAC_CODIGO}" />
                                                                                     </p:column>
-
                                                                                     <p:column headerText="Observación">
                                                                                         <h:outputText value="#{atriAgrupac.ATR_NOMBRE_DETALLE}" />
                                                                                     </p:column>
-
                                                                                     <p:column headerText="Atributo Detalle">
                                                                                         <h:outputText value="#{atriAgrupac.DAC_DETALLE_DESCRIPCION}" />
                                                                                     </p:column>
-
                                                                                     <p:column headerText="Valor Detalle">
                                                                                         <h:outputText value="#{atriAgrupac.DAC_VALOR_ATR_DETALLE}" />
                                                                                     </p:column>
-
                                                                                 </p:dataTable>
-
                                                                             </div>
-
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </p:tab>
-
                                                     </p:tabView>
-
                                                 </div>
                                             </div>
                                         </div>    
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
-
             </p:card>
         </h:form>
-
-        <p:dialog header="Header" widgetVar="dlg4" minHeight="40" width="350" showEffect="fade" minimizable="true" maximizable="true">
-            <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </p:dialog>
-
-
         <h:form id="ventanaFinalizarProceso">
             <p:dialog header="Finalizar el Proceso" 
                       widgetVar="cambioEstado" 
@@ -1017,67 +568,110 @@ and open the template in the editor.
                       showEffect="fade" 
                       modal="true">
                 <div class="card">
-                    <h:form id="cambiarEstadoFinal">
-                        <div class="ui-fluid formgrid grid">
-                            <div class="field col-12 md:col-12">
-                                <h5>Estado Seleccionado :</h5>
-                                <p:selectOneMenu id="estado" value="#{mesaContratosBean.estado}"
-                                                 required="true"
+                    <div class="ui-fluid formgrid grid">
+                        <div class="field col-12 md:col-12">
+                            <h5>Estado Seleccionado :</h5>
+                            <p:selectOneMenu id="estado" 
+                                             value="#{mesaContratosBean.estado}"
+                                             filter="true" 
+                                             filterMatchMode="contains"
+                                             >
 
-                                                 filter="true" filterMatchMode="contains">
-
-                                    <f:selectItem itemLabel="Clic para seleccionar un estado" itemValue=""/>
-                                    <f:selectItem itemLabel="NAM" itemValue="NAM"/>
-                                    <f:selectItem itemLabel="AMC" itemValue="AMC"/>
-                                    <p:ajax event="change" listener="#{mesaContratosBean.cambioEstadoCandidato()}" update=" cambiarEstadoFinal causal" />
-                                    <br></br>
-                                </p:selectOneMenu>                       
-                                <p:selectOneMenu id="causal" value="#{mesaContratosBean.causal}"
-                                                 rendered="#{mesaContratosBean.estado == 'NAM' ? 
-                                                             true : false}"
-                                                 required="true"
+                                <f:selectItem itemLabel="AMC" itemValue="AMC"/>
+                                <f:selectItem itemLabel="NAM" itemValue="NAM"/>
+                                <p:ajax event="change" listener="#{mesaContratosBean.cambiarEstadoFinal}"  
+                                        update="
+                                        ventanaFinalizarProceso:selectCausal ventanaFinalizarProceso:textArea
+                                        ventanaFinalizarProceso:panelSelectCausal
+                                        "
+                                        />
+                                <br></br>
+                            </p:selectOneMenu>   
+                            <p:outputPanel id="panelSelectCausal" rendered="true" >
+                                <p:selectOneMenu id="selectCausal" 
+                                                 rendered="#{mesaContratosBean.opcionesNoAprobado}"
+                                                 value="#{mesaContratosBean.causa}"
+                                                 converter="entityConverter" 
                                                  filter="true" 
-                                                 filterMatchMode="contains">
-                                    <f:selectItem itemLabel="NAM" itemValue="NAM"/>
-                                    <f:selectItem itemLabel="AMC" itemValue="AMC"/>                                  
-                                </p:selectOneMenu>                                                                       
-                                <p:inputTextarea id="textArea" rows="6" cols="33" value="
-                                                 #{mesaContratosBean.estado == 'NAM' ? 'Rechazado por : ' : 'Aprobado'} 
-                                                 #{mesaContratosBean.estado}"
-                                                 rendered="#{mesaContratosBean.permisoVista.get('textArea')}"
-                                                 />
-                            </div>
-                        </div>
-                    </h:form> 
-                </div>
+                                                 filterMatchMode="contains"
+                                                 required="true"
+                                                 requiredMessage="Es necesario que seleccione la causal de rechazo"
+                                                 >
+                                    <p:ajax event="change" listener="#{mesaContratosBean.cambiarEstadoFinal()}" />
+                                    <f:selectItem value="#{null}"
+                                                  itemLabel="Seleccione una causal"
+                                                  />
+                                    <f:selectItems value="#{mesaContratosBean.causalesList}" 
+                                                   var="tipo"
+                                                   itemLabel="#{tipo.descripcion_causal}" 
+                                                   itemValue="#{tipo}"/>                                               
+                                    <p:ajax event="change"                                            
+                                            listener="#{mesaContratosBean.seleccionarCausal()}" update="ventanaFinalizarProceso:textArea "/>
+                                    <br></br>
+                                </p:selectOneMenu>  
 
+                            </p:outputPanel>
+                            <p:inputTextarea id="textArea"
+                                             rows="6" 
+                                             cols="33" 
+                                             value="#{mesaContratosBean.observacionFinal}"
+                                             />
+                        </div>
+                    </div>
+                </div>
                 <f:facet name="footer">
                     <p:commandButton value="No" 
                                      icon="pi pi-times"
                                      styleClass="ui-confirmdialog-no ui-button-flat"
-                                     actionListener="#{mesaContratosBean.closeDialog()}"
+                                     onclick="PF('cambioEstado').hide()"
+                                     update="message"
                                      />
                     <p:commandButton value="Aceptar"
-                                     actionListener="#{mesaContratosBean.enviarCandidatoFirmar()}"
-                                     action="#{mesaContratosBean.init()}"
-                                     update="@form"
-                                     styleClass="mr-2"
-                                     icon="pi pi-check">
+                                     action="#{mesaContratosBean.enviarCandidatoFirmar()}"
+                                     styleClass="mr-2"                                   
+                                     icon="pi pi-check" 
+                                     onstart="PrimeFaces.monitorDownload(start);"
+                                     oncomplete="PrimeFaces.monitorDownload(stop);" 
+                                     timeout="2000"
+                                     update="ventanaFinalizarProceso message "
+                                     id="btnAceptar" 
+                                     >                    
                     </p:commandButton>
                 </f:facet>
-
-
             </p:dialog>
         </h:form>
-
-        <p:dialog widgetVar="statusDialog"
-                  modal="true"
-                  draggable="false"
-                  resizable="false"
-                  showHeader="false"
-                  >
-            <img src="Resource/gif/progress-unscreen.gif" alt=""/>
-        </p:dialog>
-
+        <p:outputPanel>
+            <h:form id="seguimientoMesaContratos">
+                <p:dialog header="Seguimiento Mesa Contratos" 
+                          widgetVar="seguimientoMesa" 
+                          minHeight="40" 
+                          width="auto" 
+                          showEffect="fade" 
+                          modal="true">
+                    <div class="card">
+                        <div class="ui-fluid formgrid grid">
+                            <p:dataTable var="sucursal" 
+                                         value="#{acuerdoEmpresaBean.sucursal}"
+                                         draggableColumns="true"
+                                         id="tblSeguimientoMesa"
+                                         reflow="true" 
+                                         rows="6" 
+                                         paginator="true"
+                                         >
+                                <p:column headerText="id ">
+                                    <h:outputText value="#{sucursal.SUE_CODIGO}" />
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <h:outputText value="#{sucursal.SUE_NOMBRE}" />
+                                </p:column>
+                                <p:column headerText="Direccion">
+                                    <h:outputText value="#{sucursal.SUE_DIRECCION}" />
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </p:dialog>
+            </h:form>
+        </p:outputPanel>
     </ui:define>
 </ui:composition>
